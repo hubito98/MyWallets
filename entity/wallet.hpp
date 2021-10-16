@@ -4,11 +4,11 @@
 
 class Wallet {
 public:
-    Wallet(int id, const std::string& userLogin, const std::string& name,
+    Wallet(size_t id, const std::string& userLogin, const std::string& name,
            const std::string& description="")
     : id(id), userLogin(userLogin), name(name), description(description) {}
 
-    int getId() const {
+    size_t getId() const {
         return id;
     }
 
@@ -25,7 +25,7 @@ public:
     }
 
 private:
-    int id;
+    size_t id;
     std::string userLogin;
     std::string name;
     std::string description;

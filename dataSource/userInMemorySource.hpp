@@ -8,7 +8,6 @@
 
 class UserInMemorySource: public UserSource {
 public:
-    UserInMemorySource();
     const std::vector<User>& getUsers() const override;
     virtual std::optional<User> getUser(const std::string& login) const override;
     virtual bool addUser(const std::string& login) override;

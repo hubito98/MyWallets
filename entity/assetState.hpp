@@ -1,19 +1,24 @@
 #pragma once
 
 #include <string>
-#include <ctime>
+
+#include "dateHandling/date.hpp"
 
 class AssetState {
 public:
-    AssetState(int id, const std::time_t& date, double value, double income)
-    : id(id), date(date), value(value), income(income) {}
+    AssetState(size_t id, size_t assetId, const Date& date, double value, double income)
+    : id(id), assetId(assetId), date(date), value(value), income(income) {}
 
-    int getId() const {
+    size_t getId() const {
         return id;
     }
 
-    std::time_t getDate() const {
-        return date;
+    size_t getAssetId() const {
+        return assetId;
+    }
+
+    std::string getDate() const {
+        return date.asString();
     }
 
     double getValue() const {
@@ -24,8 +29,9 @@ public:
         return income;
     }
 private:
-    int id;
-    std::time_t date;
+    size_t id;
+    size_t assetId;
+    Date date;
     double value;
     double income;
 };

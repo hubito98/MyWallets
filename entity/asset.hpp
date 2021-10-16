@@ -1,27 +1,31 @@
 #pragma once
 
 #include <string>
-#include "entity/assetType.hpp"
 
 class Asset {
 public:
-    Asset(int id, const std::string& description, const AssetType& type)
-    : id(id), description(description), type(type) {}
+    Asset(size_t id, size_t walletId, const std::string& type, const std::string& description)
+    : id(id), walletId(walletId), type(type), description(description) {}
 
-    int getId() const {
+    size_t getId() const {
         return id;
+    }
+
+    size_t getWalletId() const {
+        return walletId;
+    }
+
+    std::string getType() const {
+        return type;
     }
 
     std::string getDescription() const {
         return description;
     }
 
-    AssetType getType() const {
-        return type;
-    }
-
 private:
-    int id;
+    size_t id;
+    size_t walletId;
+    std::string type;
     std::string description;
-    AssetType type;
 };
