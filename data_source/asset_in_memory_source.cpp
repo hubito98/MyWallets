@@ -1,4 +1,6 @@
-#include "dataSource/assetInMemorySource.hpp"
+#include "data_source/asset_in_memory_source.hpp"
+
+namespace my_wallets {
 
 const std::vector<Asset>& AssetInMemorySource::getAssets() const {
     return assets;
@@ -25,3 +27,5 @@ bool AssetInMemorySource::addAsset(const size_t walletId, const std::string& typ
     assets.push_back(Asset(assets.size(), walletId, type, description));
     return true;
 }
+
+} // my_wallets

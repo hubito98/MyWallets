@@ -4,15 +4,16 @@
 #include "entity/user.hpp"
 #include "entity/wallet.hpp"
 #include "entity/asset.hpp"
-#include "entity/assetState.hpp"
+#include "entity/asset_state.hpp"
 
-#include "dataSource/userInMemorySource.hpp"
-#include "dataSource/walletInMemorySource.hpp"
-#include "dataSource/assetInMemorySource.hpp"
-#include "dataSource/assetStateInMemorySource.hpp"
+#include "data_source/user_in_memory_source.hpp"
+#include "data_source/wallet_in_memory_source.hpp"
+#include "data_source/asset_in_memory_source.hpp"
+#include "data_source/asset_state_in_memory_source.hpp"
 
-#include "dateHandling/date.hpp"
+#include "date_handling/date.hpp"
 
+using namespace my_wallets;
 
 void setup(UserInMemorySource& userSource, WalletInMemorySource& walletSource,
            AssetInMemorySource& assetSource, AssetStateInMemorySource& assetStateSource) {

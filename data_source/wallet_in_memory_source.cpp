@@ -1,4 +1,6 @@
-#include "dataSource/walletInMemorySource.hpp"
+#include "data_source/wallet_in_memory_source.hpp"
+
+namespace my_wallets {
 
 const std::vector<Wallet>& WalletInMemorySource::getWallets() const {
     return wallets;
@@ -25,3 +27,5 @@ bool WalletInMemorySource::addWallet(const std::string& userLogin, const std::st
     wallets.push_back(Wallet(wallets.size(), userLogin, name, description));
     return true;
 }
+
+} // my_wallets

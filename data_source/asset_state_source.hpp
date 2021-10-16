@@ -2,7 +2,9 @@
 
 #include <vector>
 #include <optional>
-#include "entity/assetState.hpp"
+#include "entity/asset_state.hpp"
+
+namespace my_wallets {
 
 class AssetStateSource {
 public:
@@ -12,3 +14,5 @@ public:
     virtual bool addAssetState(const size_t assetId, const Date& date, const double value,
                               const double income) = 0;
 };
+
+} // my_wallets

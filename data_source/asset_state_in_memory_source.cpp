@@ -1,4 +1,6 @@
-#include "assetStateInMemorySource.hpp"
+#include "asset_state_in_memory_source.hpp"
+
+namespace my_wallets {
 
 const std::vector<AssetState>& AssetStateInMemorySource::getAssetStates() const {
     return assetStates;
@@ -26,3 +28,5 @@ bool AssetStateInMemorySource::addAssetState(const size_t assetId, const Date& d
     assetStates.push_back(AssetState(assetStates.size(), assetId, date, value, income));
     return true;
 }
+
+} // my_wallets

@@ -4,6 +4,8 @@
 #include <optional>
 #include "entity/asset.hpp"
 
+namespace my_wallets {
+
 class AssetSource {
 public:
     virtual const std::vector<Asset>&  getAssets() const = 0;
@@ -12,3 +14,5 @@ public:
     virtual bool addAsset(const size_t walletId, const std::string& type,
                           const std::string& description=0) = 0;
 };
+
+} // my_wallets

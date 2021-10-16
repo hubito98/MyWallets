@@ -2,10 +2,10 @@ PROG = main
 CC = g++
 CPPFLAGS = -I. -std=c++17
 
-compile: main.cpp dataSource/userInMemorySource.cpp dataSource/assetStateInMemorySource.cpp \
-		dataSource/walletInMemorySource.cpp dataSource/assetInMemorySource.cpp
-	$(CC) -o $(PROG) main.cpp dataSource/userInMemorySource.cpp dataSource/assetStateInMemorySource.cpp \
-			dataSource/walletInMemorySource.cpp dataSource/assetInMemorySource.cpp $(CPPFLAGS)
+compile: main.cpp data_source/user_in_memory_source.cpp data_source/asset_state_in_memory_source.cpp \
+		data_source/wallet_in_memory_source.cpp data_source/asset_in_memory_source.cpp
+	$(CC) -o $(PROG) main.cpp data_source/user_in_memory_source.cpp data_source/asset_state_in_memory_source.cpp \
+		data_source/wallet_in_memory_source.cpp data_source/asset_in_memory_source.cpp $(CPPFLAGS)
 
 run: compile
 	./$(PROG)

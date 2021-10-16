@@ -3,8 +3,10 @@
 #include <vector>
 #include <optional>
 
-#include "dataSource/assetStateSource.hpp"
-#include "entity/assetState.hpp"
+#include "data_source/asset_state_source.hpp"
+#include "entity/asset_state.hpp"
+
+namespace my_wallets {
 
 class AssetStateInMemorySource : public AssetStateSource {
 public:
@@ -16,3 +18,5 @@ public:
 private:
     std::vector<AssetState> assetStates;
 };
+
+} // my_wallets

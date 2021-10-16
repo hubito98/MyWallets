@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace my_wallets {
+
 class Wallet {
 public:
     Wallet(size_t id, const std::string& userLogin, const std::string& name,
@@ -30,3 +32,5 @@ private:
     std::string name;
     std::string description;
 };
+
+} // my_wallets

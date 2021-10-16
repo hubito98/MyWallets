@@ -2,7 +2,9 @@
 
 #include <string>
 
-#include "dateHandling/date.hpp"
+#include "date_handling/date.hpp"
+
+namespace my_wallets {
 
 class AssetState {
 public:
@@ -35,3 +37,5 @@ private:
     double value;
     double income;
 };
+
+} // my_wallets

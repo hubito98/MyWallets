@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace my_wallets {
+
 class Asset {
 public:
     Asset(size_t id, size_t walletId, const std::string& type, const std::string& description)
@@ -29,3 +31,5 @@ private:
     std::string type;
     std::string description;
 };
+
+} // my_wallets

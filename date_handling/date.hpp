@@ -3,6 +3,8 @@
 #include <cstddef>
 #include <string>
 
+namespace my_wallets {
+
 class Date {
 public:
     Date(size_t year, size_t month, size_t day)
@@ -14,3 +16,5 @@ public:
 private:
     size_t year, month, day;
 };
+
+} // my_wallets

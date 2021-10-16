@@ -3,8 +3,10 @@
 #include <vector>
 #include <optional>
 
-#include "dataSource/userSource.hpp"
+#include "data_source/user_source.hpp"
 #include "entity/user.hpp"
+
+namespace my_wallets {
 
 class UserInMemorySource: public UserSource {
 public:
@@ -14,3 +16,5 @@ public:
 private:
     std::vector<User> users;
 };
+
+} // my_wallets

@@ -3,8 +3,10 @@
 #include <vector>
 #include <optional>
 
-#include "dataSource/assetSource.hpp"
+#include "data_source/asset_source.hpp"
 #include "entity/asset.hpp"
+
+namespace my_wallets {
 
 class AssetInMemorySource : public AssetSource {
 public:
@@ -16,3 +18,5 @@ public:
 private:
     std::vector<Asset> assets;
 };
+
+} // my_wallets

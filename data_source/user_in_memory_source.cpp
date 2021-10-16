@@ -1,4 +1,6 @@
-#include "dataSource/userInMemorySource.hpp"
+#include "data_source/user_in_memory_source.hpp"
+
+namespace my_wallets {
 
 const std::vector<User>& UserInMemorySource::getUsers() const {
     return users;
@@ -20,3 +22,5 @@ bool UserInMemorySource::addUser(const std::string& login) {
         return false;
     }
 }
+
+} // my_wallets
