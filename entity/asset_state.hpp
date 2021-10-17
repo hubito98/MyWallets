@@ -19,8 +19,8 @@ public:
         return assetId;
     }
 
-    std::string getDate() const {
-        return date.asString();
+    Date getDate() const {
+        return date;
     }
 
     double getValue() const {

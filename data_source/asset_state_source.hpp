@@ -12,7 +12,7 @@ public:
     virtual const std::vector<AssetState> getParticularAssetStates(const size_t assetId) const = 0;
     virtual std::optional<AssetState> getAssetState(const size_t id) const = 0;
     virtual bool addAssetState(const size_t assetId, const Date& date, const double value,
-                              const double income) = 0;
+                               const double income) = 0;
 };
 
 } // my_wallets

@@ -1,0 +1,42 @@
+#pragma once
+
+#include <vector>
+#include <memory>
+
+#include "data_source/asset_source.hpp"
+#include "data_source/asset_state_source.hpp"
+#include "data_source/user_source.hpp"
+#include "data_source/wallet_source.hpp"
+
+#include "model/user_model.hpp"
+#include "model/wallet_model.hpp"
+#include "model/asset_model.hpp"
+#include "model/asset_state_model.hpp"
+
+namespace my_wallets {
+
+class MyWallets {
+public:
+    MyWallets(std::shared_ptr<UserSource> userSource, std::shared_ptr<WalletSource> walletSource,
+              std::shared_ptr<AssetSource> assetSource, std::shared_ptr<AssetStateSource> assetStateSource)
+    : assetSource(assetSource), assetStateSource(assetStateSource), userSource(userSource), walletSource(walletSource) {}
+    const std::vector<UserModel> getUsers() const;
+    bool addUser(const std::string& login);
+    const std::vector<WalletModel> getUserWallets(const UserModel& userModel) const;
+    bool addWallet(const std::string& userLogin, const std::string& name,
+                   const std::string& description="");
+    const std::vector<AssetModel> getAssetsFromWallet(const WalletModel& walletModel) const;
+    bool addAsset(const size_t walletId, const std::string& type,
+                  const std::string& description=0);
+    const std::vector<AssetStateModel> getAssetStatesOfAsset(const AssetModel& assetModel) const;
+    bool addAssetState(const size_t assetId, const Date& date, const double value,
+                       const double income);
+
+private:
+    std::shared_ptr<UserSource> userSource;
+    std::shared_ptr<WalletSource> walletSource;
+    std::shared_ptr<AssetSource> assetSource;
+    std::shared_ptr<AssetStateSource> assetStateSource;
+};
+
+} // my_wallets
