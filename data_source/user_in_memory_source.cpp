@@ -2,7 +2,7 @@
 
 namespace my_wallets {
 
-const std::vector<User>& UserInMemorySource::getUsers() const {
+const std::vector<User> UserInMemorySource::getUsers() const {
     return users;
 }
 

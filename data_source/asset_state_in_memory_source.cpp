@@ -2,7 +2,7 @@
 
 namespace my_wallets {
 
-const std::vector<AssetState>& AssetStateInMemorySource::getAssetStates() const {
+const std::vector<AssetState> AssetStateInMemorySource::getAssetStates() const {
     return assetStates;
 }
 

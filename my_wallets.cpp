@@ -4,7 +4,8 @@ namespace my_wallets {
 
 const std::vector<UserModel> MyWallets::getUsers() const {
     std::vector<UserModel> users;
-    std::transform(userSource->getUsers().begin(), userSource->getUsers().end(), std::back_inserter(users),
+    const auto usersFromSource = userSource->getUsers();
+    std::transform(usersFromSource.begin(), usersFromSource.end(), std::back_inserter(users),
                    [](const auto& user){
         return UserModel(user);
     });
