@@ -17,6 +17,10 @@ public:
     virtual std::optional<User> getUser(const std::string& login) const override;
     virtual bool addUser(const std::string& login) override;
 private:
+    static User userFromDbResult(mysqlx::Row userFromDb) {
+        return User((std::string)userFromDb[0]);
+    }
+
     std::shared_ptr<Database> database;
 };
 
