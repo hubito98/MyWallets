@@ -19,7 +19,7 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& os, const AssetStateModel& assetStateModel) {
-        os << "Asset { id: " << assetStateModel.id << ", date: "<<assetStateModel.date.asString()
+        os << "AssetState { id: " << assetStateModel.id << ", date: "<<assetStateModel.date.asString()
                 <<", value: "<<assetStateModel.value<<", income: "<<assetStateModel.income<<" }";
         return os;
     }

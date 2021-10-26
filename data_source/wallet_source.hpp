@@ -13,6 +13,7 @@ public:
     virtual std::optional<Wallet> getWallet(const size_t id) const = 0;
     virtual bool addWallet(const std::string& userLogin, const std::string& name,
                            const std::string& description="") = 0;
+    virtual ~WalletSource() {};
 };
 
 } // my_wallets

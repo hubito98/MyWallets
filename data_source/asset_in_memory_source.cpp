@@ -24,7 +24,7 @@ std::optional<Asset> AssetInMemorySource::getAsset(const size_t id) const {
 
 bool AssetInMemorySource::addAsset(const size_t walletId, const std::string& type,
                                    const std::string& description) {
-    assets.push_back(Asset(assets.size(), walletId, type, description));
+    assets.push_back(Asset(assets.size()+1, walletId, type, description));
     return true;
 }
 

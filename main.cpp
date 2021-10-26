@@ -6,15 +6,15 @@
 #include "entity/asset.hpp"
 #include "entity/asset_state.hpp"
 
-#include "data_source/user_in_memory_source.hpp"
-#include "data_source/wallet_in_memory_source.hpp"
-#include "data_source/asset_in_memory_source.hpp"
-#include "data_source/asset_state_in_memory_source.hpp"
+#include "data_source/database.hpp"
+#include "data_source/user_db_source.hpp"
+#include "data_source/wallet_db_source.hpp"
+#include "data_source/asset_db_source.hpp"
+#include "data_source/asset_state_db_source.hpp"
 
 #include "date_handling/date.hpp"
 
 #include "my_wallets.hpp"
-// #include "data_source/database.hpp"
 
 using namespace my_wallets;
 
@@ -28,9 +28,9 @@ void setup(MyWallets& myWallets) {
     myWallets.addWallet(firstUserLogin, "Dlugoterminowy", "Oszczednosci na emeryture");
     myWallets.addWallet(secondUserLogin, "Wklad na kredyt hipoteczny", "Pieniadze na wklad na mieszkanie");
 
-    const auto firstWalletId = 0;
-    const auto secondWalletId = 1;
-    const auto thirdWalletId = 2;
+    const auto firstWalletId = 1;
+    const auto secondWalletId = 2;
+    const auto thirdWalletId = 3;
     myWallets.addAsset(firstWalletId, "Lokaty", "Niskoprocentowe lokaty (najbezpiecznieszy element)");
     myWallets.addAsset(firstWalletId, "Obligacje EDO", "Obligacje 10 letnie indeksowane inflacja");
     myWallets.addAsset(secondWalletId, "ETF EM", "Pasywny fundusz akcyjny firm panstw wschodzacych");
@@ -38,8 +38,8 @@ void setup(MyWallets& myWallets) {
     myWallets.addAsset(secondWalletId, "Zloto", "Zloto inwestycyjne (monety i sztabki)");
     myWallets.addAsset(thirdWalletId, "Gotowka", "Gotowka odkladana na wklad wlasny na kredyt hipoteczny");
 
-    const auto firstAssetId = 0;
-    const auto secondAssetId = 1;
+    const auto firstAssetId = 1;
+    const auto secondAssetId = 2;
     myWallets.addAssetState(firstAssetId, Date(2021, 8, 13), 100, 100);
     myWallets.addAssetState(firstAssetId, Date(2021, 9, 10), 1605.22, 1500);
     myWallets.addAssetState(secondAssetId, Date(2021, 8, 13), 1000, 1000);
@@ -47,29 +47,13 @@ void setup(MyWallets& myWallets) {
     myWallets.addAssetState(secondAssetId, Date(2021, 9, 10), 2004.26, 1000);
 }
 
-void printUser(const User& user) {
-    std::cout<<"User: "<<user.getLogin()<<std::endl;
-}
-
-void printWallet(const Wallet& wallet) {
-    std::cout<<"Wallet: "<<wallet.getId()<<", "<<wallet.getUserLogin()<<", "<<wallet.getName()<<", "<<wallet.getDescription()<<std::endl;
-}
-
-void printAsset(const Asset& asset) {
-    std::cout<<"Asset: "<<asset.getId()<<", "<<asset.getWalletId()<<", "<<asset.getType()<<", "<<asset.getDescription()<<std::endl;
-}
-
-void printAssetState(const AssetState& assetState) {
-    std::cout<<"AssetState: "<<assetState.getId()<<", "<<assetState.getAssetId()<<", "<<assetState.getDate().asString()<<", "
-            <<assetState.getValue()<<", "<<assetState.getIncome()<<std::endl;
-}
 
 int main() {
-    std::shared_ptr<UserSource> userSource = std::make_shared<UserInMemorySource>();
-    std::shared_ptr<WalletSource> walletSource = std::make_shared<WalletInMemorySource>();
-    std::shared_ptr<AssetSource> assetSource = std::make_shared<AssetInMemorySource>();
-    std::shared_ptr<AssetStateSource> assetStateSource = std::make_shared<AssetStateInMemorySource>();
-    MyWallets myWallets(userSource, walletSource, assetSource, assetStateSource);
+    std::shared_ptr<Database> database(new Database("test_db"));
+    MyWallets myWallets(std::make_unique<UserDbSource>(database),
+                        std::make_unique<WalletDbSource>(database),
+                        std::make_unique<AssetDbSource>(database),
+                        std::make_unique<AssetStateDbSource>(database));
     setup(myWallets);
 
     for (const auto& user : myWallets.getUsers()) {

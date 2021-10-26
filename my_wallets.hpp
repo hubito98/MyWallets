@@ -17,9 +17,12 @@ namespace my_wallets {
 
 class MyWallets {
 public:
-    MyWallets(std::shared_ptr<UserSource> userSource, std::shared_ptr<WalletSource> walletSource,
-              std::shared_ptr<AssetSource> assetSource, std::shared_ptr<AssetStateSource> assetStateSource)
-    : assetSource(assetSource), assetStateSource(assetStateSource), userSource(userSource), walletSource(walletSource) {}
+    MyWallets(std::unique_ptr<UserSource> userSource, std::unique_ptr<WalletSource> walletSource,
+              std::unique_ptr<AssetSource> assetSource, std::unique_ptr<AssetStateSource> assetStateSource)
+    : assetSource(std::move(assetSource)),
+      assetStateSource(std::move(assetStateSource)),
+      userSource(std::move(userSource)),
+      walletSource(std::move(walletSource)) {}
     const std::vector<UserModel> getUsers() const;
     bool addUser(const std::string& login);
     const std::vector<WalletModel> getUserWallets(const UserModel& userModel) const;
@@ -33,10 +36,10 @@ public:
                        const double income);
 
 private:
-    std::shared_ptr<UserSource> userSource;
-    std::shared_ptr<WalletSource> walletSource;
-    std::shared_ptr<AssetSource> assetSource;
-    std::shared_ptr<AssetStateSource> assetStateSource;
+    std::unique_ptr<UserSource> userSource;
+    std::unique_ptr<WalletSource> walletSource;
+    std::unique_ptr<AssetSource> assetSource;
+    std::unique_ptr<AssetStateSource> assetStateSource;
 };
 
 } // my_wallets

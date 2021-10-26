@@ -3,6 +3,8 @@
 #include <vector>
 #include <optional>
 
+#include <mysqlx/xdevapi.h>
+
 #include "data_source/wallet_source.hpp"
 #include "data_source/database.hpp"
 #include "entity/wallet.hpp"
@@ -19,7 +21,7 @@ public:
     bool addWallet(const std::string& userLogin, const std::string& name,
                    const std::string& description="") override;
 private:
-    static Wallet walletFromDbResult(mysqlx::Row walletFromDb) {
+    static Wallet walletFromDbResult(const mysqlx::Row& walletFromDb) {
         return Wallet((int)walletFromDb[0], (std::string)walletFromDb[3],
                       (std::string)walletFromDb[1], (std::string)walletFromDb[2]);
     }

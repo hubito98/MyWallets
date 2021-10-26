@@ -24,7 +24,7 @@ std::optional<Wallet> WalletInMemorySource::getWallet(const size_t id) const {
 
 bool WalletInMemorySource::addWallet(const std::string& userLogin, const std::string& name,
                                      const std::string& description) {
-    wallets.push_back(Wallet(wallets.size(), userLogin, name, description));
+    wallets.push_back(Wallet(wallets.size()+1, userLogin, name, description));
     return true;
 }
 

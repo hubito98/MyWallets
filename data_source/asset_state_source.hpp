@@ -13,6 +13,7 @@ public:
     virtual std::optional<AssetState> getAssetState(const size_t id) const = 0;
     virtual bool addAssetState(const size_t assetId, const Date& date, const double value,
                                const double income) = 0;
+    virtual ~AssetStateSource() {};
 };
 
 } // my_wallets

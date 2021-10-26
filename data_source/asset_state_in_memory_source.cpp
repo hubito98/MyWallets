@@ -25,7 +25,7 @@ std::optional<AssetState> AssetStateInMemorySource::getAssetState(const size_t i
 
 bool AssetStateInMemorySource::addAssetState(const size_t assetId, const Date& date, const double value,
                                              const double income) {
-    assetStates.push_back(AssetState(assetStates.size(), assetId, date, value, income));
+    assetStates.push_back(AssetState(assetStates.size()+1, assetId, date, value, income));
     return true;
 }
 
