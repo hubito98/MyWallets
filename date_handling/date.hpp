@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <string>
+#include <ctime>
 
 namespace my_wallets {
 
@@ -24,6 +25,12 @@ public:
 
     size_t getDay() const {
         return day;
+    }
+
+    int operator-(const Date& rhs) const {
+        std::tm t0 = {.tm_mday=(int)rhs.getDay(), .tm_mon=(int)rhs.getMonth()-1, .tm_year=(int)rhs.getYear()-1900};
+        std::tm t1 = {.tm_mday=(int)this->getDay(), .tm_mon=(int)this->getMonth()-1, .tm_year=(int)this->getYear()-1900};
+        return (int)(std::difftime(std::mktime(&t1), std::mktime(&t0)) / (60 * 60 * 24));
     }
 
 private:
