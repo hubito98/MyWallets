@@ -1,6 +1,7 @@
 #include "my_wallets.hpp"
 
 namespace my_wallets {
+namespace frontend {
 
 const std::vector<UserModel> MyWallets::getUsers() const {
     std::vector<UserModel> users;
@@ -61,4 +62,5 @@ bool MyWallets::addAssetState(const size_t assetId, const Date& date, const doub
     return assetStateSource->addAssetState(assetId, date, value, income);
 }
 
-}
+} // frontend
+} // my_wallets

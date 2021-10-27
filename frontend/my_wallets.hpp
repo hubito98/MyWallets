@@ -14,6 +14,7 @@
 #include "model/asset_state_model.hpp"
 
 namespace my_wallets {
+namespace frontend {
 
 class MyWallets {
 public:
@@ -42,4 +43,5 @@ private:
     std::unique_ptr<AssetStateSource> assetStateSource;
 };
 
+} // frontend
 } // my_wallets
