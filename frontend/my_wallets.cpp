@@ -13,7 +13,7 @@ const std::vector<UserModel> MyWallets::getUsers() const {
     return users;
 }
 
-bool MyWallets::addUser(const std::string& login) {
+bool MyWallets::addUser(const std::string& login) const {
     return userSource->addUser(login);
 }
 
@@ -43,7 +43,7 @@ const std::vector<AssetModel> MyWallets::getAssetsFromWallet(const WalletModel& 
 }
 
 bool MyWallets::addAsset(const size_t walletId, const std::string& type,
-                         const std::string& description) {
+                         const std::string& description) const {
     return assetSource->addAsset(walletId, type, description);
 }
 
@@ -58,7 +58,7 @@ const std::vector<AssetStateModel> MyWallets::getAssetStatesOfAsset(const AssetM
 }
 
 bool MyWallets::addAssetState(const size_t assetId, const Date& date, const double value,
-                              const double income) {
+                              const double income) const {
     return assetStateSource->addAssetState(assetId, date, value, income);
 }
 

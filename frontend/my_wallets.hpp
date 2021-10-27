@@ -25,16 +25,16 @@ public:
       userSource(std::move(userSource)),
       walletSource(std::move(walletSource)) {}
     const std::vector<UserModel> getUsers() const;
-    bool addUser(const std::string& login);
+    bool addUser(const std::string& login) const;
     const std::vector<WalletModel> getUserWallets(const UserModel& userModel) const;
     bool addWallet(const std::string& userLogin, const std::string& name,
                    const std::string& description="");
     const std::vector<AssetModel> getAssetsFromWallet(const WalletModel& walletModel) const;
     bool addAsset(const size_t walletId, const std::string& type,
-                  const std::string& description=0);
+                  const std::string& description=0) const;
     const std::vector<AssetStateModel> getAssetStatesOfAsset(const AssetModel& assetModel) const;
     bool addAssetState(const size_t assetId, const Date& date, const double value,
-                       const double income);
+                       const double income) const;
 
 private:
     std::unique_ptr<UserSource> userSource;
