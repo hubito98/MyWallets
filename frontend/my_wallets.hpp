@@ -12,6 +12,7 @@
 #include "model/wallet_model.hpp"
 #include "model/asset_model.hpp"
 #include "model/asset_state_model.hpp"
+#include "model/basic_asset_statistics_model.hpp"
 
 namespace my_wallets {
 namespace frontend {
@@ -40,6 +41,9 @@ public:
     const std::vector<AssetStateModel> getAssetStatesOfAsset(const AssetModel& assetModel) const;
     bool addAssetState(const size_t assetId, const Date& date, const double value,
                        const double income) const;
+    
+    // asset states statistics    
+    const model::BasicAssetStatisticModel getBasicAssetStatistics(const AssetModel& assetModel) const;
 
 private:
     std::unique_ptr<UserSource> userSource;

@@ -70,6 +70,8 @@ public:
                     addAssetStateAction();
                 } else if (choice == 2) {
                     showAssetStatesAction();
+                } else if (choice == 3) {
+                    showBasicAssetStatisticsAction();
                 } else if (choice == 0) {
                     backToAssetsMenu();
                 } else {
@@ -234,6 +236,7 @@ private:
     void showAssetStatesMenu() const {
         std::cout<<std::endl<<"1 - create asset state"<<std::endl;
         std::cout<<"2 - show asset states"<<std::endl;
+        std::cout<<"3 - show basic asset statistics"<<std::endl;
         std::cout<<"0 - back to previous menu"<<std::endl<<std::endl;
     }
 
@@ -272,6 +275,9 @@ private:
         for (const auto& assetState : myWallets->getAssetStatesOfAsset(*choosedAsset)) {
             std::cout<<assetState<<std::endl;
         }
+    }
+    void showBasicAssetStatisticsAction() const {
+        std::cout<<myWallets->getBasicAssetStatistics(*choosedAsset)<<std::endl;
     }
 
     void backToAssetsMenu() {

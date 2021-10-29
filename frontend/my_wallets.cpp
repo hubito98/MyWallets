@@ -62,5 +62,11 @@ bool MyWallets::addAssetState(const size_t assetId, const Date& date, const doub
     return assetStateSource->addAssetState(assetId, date, value, income);
 }
 
+const model::BasicAssetStatisticModel MyWallets::getBasicAssetStatistics(const AssetModel& assetModel) const {
+    const auto asset = assetSource->getAsset(assetModel.getId());
+    const auto assetStates = assetStateSource->getParticularAssetStates(assetModel.getId());
+    return model::BasicAssetStatisticModel(asset.value(), assetStates);
+}
+
 } // frontend
 } // my_wallets
