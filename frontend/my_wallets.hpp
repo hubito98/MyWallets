@@ -16,6 +16,11 @@
 namespace my_wallets {
 namespace frontend {
 
+using UserModel = model::UserModel;
+using WalletModel = model::WalletModel;
+using AssetModel = model::AssetModel;
+using AssetStateModel = model::AssetStateModel;
+
 class MyWallets {
 public:
     MyWallets(std::unique_ptr<UserSource> userSource, std::unique_ptr<WalletSource> walletSource,

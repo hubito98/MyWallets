@@ -6,6 +6,7 @@
 #include "entity/wallet.hpp"
 
 namespace my_wallets {
+namespace model {
 
 class WalletModel {
 public:
@@ -26,4 +27,5 @@ private:
     std::string description;
 };
 
-}
+} // model
+} // my_wallets

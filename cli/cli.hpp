@@ -113,7 +113,7 @@ private:
             currentState = State::USERS_MENU;
         } else {
             std::cout<<"You choosed: "<<users[choice]<<std::endl;
-            choosedUser = std::make_unique<UserModel>(std::move(users[choice]));
+            choosedUser = std::make_unique<model::UserModel>(std::move(users[choice]));
             currentState = State::WALLETS_MENU;
         }
     }
@@ -161,7 +161,7 @@ private:
             currentState = State::WALLETS_MENU;
         } else {
             std::cout<<"You choosed: "<<wallets[choice]<<std::endl;
-            choosedWallet = std::make_unique<WalletModel>(std::move(wallets[choice]));
+            choosedWallet = std::make_unique<model::WalletModel>(std::move(wallets[choice]));
             currentState = State::ASSETS_MENU;
         }
     }
@@ -214,7 +214,7 @@ private:
             currentState = State::ASSETS_MENU;
         } else {
             std::cout<<"You choosed: "<<assets[choice]<<std::endl;
-            choosedAsset = std::make_unique<AssetModel>(std::move(assets[choice]));
+            choosedAsset = std::make_unique<model::AssetModel>(std::move(assets[choice]));
             currentState = State::ASSET_STATES_MENU;
         }
     }
@@ -286,9 +286,9 @@ private:
 
     std::unique_ptr<frontend::MyWallets> myWallets;
     State currentState;
-    std::unique_ptr<UserModel> choosedUser;
-    std::unique_ptr<WalletModel> choosedWallet;
-    std::unique_ptr<AssetModel> choosedAsset;
+    std::unique_ptr<model::UserModel> choosedUser;
+    std::unique_ptr<model::WalletModel> choosedWallet;
+    std::unique_ptr<model::AssetModel> choosedAsset;
     bool running;
 };
 

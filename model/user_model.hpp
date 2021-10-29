@@ -6,6 +6,7 @@
 #include "entity/user.hpp"
 
 namespace my_wallets {
+namespace model {
 
 class UserModel {
 public:
@@ -24,4 +25,5 @@ private:
     std::string login;
 };
 
-}
+} // model
+} // my_wallets

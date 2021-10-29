@@ -7,6 +7,7 @@
 #include "date_handling/date.hpp"
 
 namespace my_wallets {
+namespace model {
 
 class AssetStateModel {
 public:
@@ -30,4 +31,5 @@ private:
     double income;
 };
 
-}
+} // model
+} // my_wallets

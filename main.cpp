@@ -24,10 +24,6 @@ using namespace my_wallets;
 int main() {
     std::shared_ptr<Database> database = 
             std::make_shared<Database>(utils::getEnv(utils::DatabaseNameEnvVar::envName, utils::DatabaseNameEnvVar::defaultValue));
-    frontend::MyWallets myWallets(std::make_unique<UserDbSource>(database),
-                                  std::make_unique<WalletDbSource>(database),
-                                  std::make_unique<AssetDbSource>(database),
-                                  std::make_unique<AssetStateDbSource>(database));
     cli::CLI cli(std::make_unique<frontend::MyWallets>(std::make_unique<UserDbSource>(database),
                                                        std::make_unique<WalletDbSource>(database),
                                                        std::make_unique<AssetDbSource>(database),
