@@ -24,7 +24,7 @@ void BasicAssetStatisticModel::calculateAssetStateStats(const std::vector<AssetS
             [](const AssetState& current, const AssetState& previous) {
         double growth = (current.getValue() - current.getIncome()) - previous.getValue();
         double growthInPercent = growth / previous.getValue() * 100;
-        int daysDifference = std::min(current.getDate() - previous.getDate(), 1);
+        int daysDifference = std::max(current.getDate() - previous.getDate(), 1);
         return SingleAssetStateStat{
             .date = current.getDate(),
             .value = current.getValue(),
