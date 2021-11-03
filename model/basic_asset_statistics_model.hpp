@@ -21,7 +21,7 @@ public:
         os << "\tDate, value, income, growth, growthInPercenet, growthInPercentScaleByYear" << "\n";
         for (const auto& stat : basicAssetStatisticModel.assetStateStats) {
             os << "\t" << stat.date.asString() << ", " << stat.value << ", " <<stat.income << ", "
-                    << stat.growth << ", " << stat.growthInPercent << ", " << stat.growthInPercentScaledByYear << "\n";
+                    << stat.growth << ", " << stat.growthInPercent << "%, " << stat.growthInPercentScaledByYear << "%\n";
         }
         return os;
     }

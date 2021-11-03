@@ -68,5 +68,16 @@ const model::BasicAssetStatisticModel MyWallets::getBasicAssetStatistics(const A
     return model::BasicAssetStatisticModel(asset.value(), assetStates);
 }
 
+const model::BasicWalletStatisticsModel MyWallets::getBasicWalletStatistics(const WalletModel& walletModel) const {
+    const auto wallet = walletSource->getWallet(walletModel.getId());
+    const auto assets = assetSource->getWalletAssets(walletModel.getId());
+    std::vector<model::BasicWalletStatisticsModel::AssetWithItsStates> assetsWithStates;
+    std::transform(assets.begin(), assets.end(), std::back_inserter(assetsWithStates),
+            [this](const Asset asset) {
+        return model::BasicWalletStatisticsModel::AssetWithItsStates(asset, assetStateSource->getParticularAssetStates(asset.getId()));
+    });
+    return model::BasicWalletStatisticsModel(wallet.value(), assetsWithStates);
+}
+
 } // frontend
 } // my_wallets

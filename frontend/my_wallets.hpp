@@ -13,6 +13,7 @@
 #include "model/asset_model.hpp"
 #include "model/asset_state_model.hpp"
 #include "model/basic_asset_statistics_model.hpp"
+#include "model/basic_wallet_statistics_model.hpp"
 
 namespace my_wallets {
 namespace frontend {
@@ -44,6 +45,7 @@ public:
     
     // asset states statistics    
     const model::BasicAssetStatisticModel getBasicAssetStatistics(const AssetModel& assetModel) const;
+    const model::BasicWalletStatisticsModel getBasicWalletStatistics(const WalletModel& walletModel) const;
 
 private:
     std::unique_ptr<UserSource> userSource;

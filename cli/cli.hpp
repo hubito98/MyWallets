@@ -57,6 +57,8 @@ public:
                     selectAssetAction();
                 } else if (choice == 3) {
                     showAssetsAction();
+                } else if (choice == 4) {
+                    showBasicWalletStatisticsAction();
                 } else if (choice == 0) {
                     backToWalletsMenu();
                 } else {
@@ -184,6 +186,7 @@ private:
         std::cout<<std::endl<<"1 - create asset"<<std::endl;
         std::cout<<"2 - select asset"<<std::endl;
         std::cout<<"3 - show assets"<<std::endl;
+        std::cout<<"4 - show basic wallet statistics"<<std::endl;
         std::cout<<"0 - back to previous menu"<<std::endl<<std::endl;
     }
 
@@ -226,6 +229,10 @@ private:
         for (const auto& asset : myWallets->getAssetsFromWallet(*choosedWallet)) {
             std::cout<<asset<<std::endl;
         }
+    }
+
+    void showBasicWalletStatisticsAction() const {
+        std::cout<<myWallets->getBasicWalletStatistics(*choosedWallet)<<std::endl;
     }
 
     void backToWalletsMenu() {
