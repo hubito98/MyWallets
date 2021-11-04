@@ -34,6 +34,19 @@ public:
         return true;
     }
 
+    bool removeUser(const std::string login) const {
+        auto session = getSession();
+        auto schema = session.getSchema(databaseName);
+        auto table = schema.getTable(usersTable);
+        try {
+            table.remove().where("login = :login").bind("login", login).execute();
+        } catch (const mysqlx::abi2::Error& error) {
+            std::cout<<"Error while removing user with login: "<<login<<std::endl;
+            return false;
+        }
+        return true;
+    }
+
     mysqlx::RowResult getUsers() const {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
@@ -59,6 +72,19 @@ public:
             table.insert("name", "description", "userLogin").values(name, description, userLogin).execute();
         } catch (const mysqlx::abi2::Error& error) {
             std::cout<<"Error while adding Wallet for user: "<<userLogin<<std::endl;
+            return false;
+        }
+        return true;
+    }
+
+    bool removeWallet(const size_t walletId) const {
+        auto session = getSession();
+        auto schema = session.getSchema(databaseName);
+        auto table = schema.getTable(walletsTable);
+        try {
+            table.remove().where("id = :walletId").bind("walletId", walletId).execute();
+        } catch (const mysqlx::abi2::Error& error) {
+            std::cout<<"Error while removing wallet with id: "<<walletId<<std::endl;
             return false;
         }
         return true;
@@ -103,6 +129,19 @@ public:
         return true;
     }
 
+    bool removeAsset(const size_t assetId) const {
+        auto session = getSession();
+        auto schema = session.getSchema(databaseName);
+        auto table = schema.getTable(assetsTable);
+        try {
+            table.remove().where("id = :assetId").bind("assetId", assetId).execute();
+        } catch (const mysqlx::abi2::Error& error) {
+            std::cout<<"Error while removing asset with id: "<<assetId<<std::endl;
+            return false;
+        }
+        return true;
+    }
+
     mysqlx::RowResult getAssets() const {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
@@ -137,6 +176,19 @@ public:
                     .values(year, month, day, value, income, assetId).execute();
         } catch (const mysqlx::abi2::Error& error) {
             std::cout<<"Error while adding AssetState for asset: "<<assetId<<std::endl;
+            return false;
+        }
+        return true;
+    }
+
+    bool removeAssetState(const size_t assetStateId) const {
+        auto session = getSession();
+        auto schema = session.getSchema(databaseName);
+        auto table = schema.getTable(assetStatesTable);
+        try {
+            table.remove().where("id = :assetStateId").bind("assetStateId", assetStateId).execute();
+        } catch (const mysqlx::abi2::Error& error) {
+            std::cout<<"Error while removing asset state with id: "<<assetStateId<<std::endl;
             return false;
         }
         return true;
