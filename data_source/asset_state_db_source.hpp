@@ -20,6 +20,7 @@ public:
     std::optional<AssetState> getAssetState(const size_t id) const override;
     bool addAssetState(const size_t assetId, const Date& date, const double value,
                               const double income) override;
+    bool removeAssetState(const size_t id) override;
 private:
     static AssetState assetStateFromDbResult(const mysqlx::Row& assetStateFromDb) {
         Date assetStateDate((int)assetStateFromDb[1], (int)assetStateFromDb[2], (int)assetStateFromDb[3]);

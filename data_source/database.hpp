@@ -21,7 +21,7 @@ public:
         session.close();
     }
 
-    bool addUser(const std::string& login) const {
+    bool addUser(const std::string& login) {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
         auto table = schema.getTable(usersTable);
@@ -34,7 +34,7 @@ public:
         return true;
     }
 
-    bool removeUser(const std::string login) const {
+    bool removeUser(const std::string& login) {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
         auto table = schema.getTable(usersTable);
@@ -64,7 +64,7 @@ public:
     }
 
     bool addWallet(const std::string& userLogin, const std::string& name,
-                   const std::string& description="") const {
+                   const std::string& description="") {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
         auto table = schema.getTable(walletsTable);
@@ -77,7 +77,7 @@ public:
         return true;
     }
 
-    bool removeWallet(const size_t walletId) const {
+    bool removeWallet(const size_t walletId) {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
         auto table = schema.getTable(walletsTable);
@@ -116,7 +116,7 @@ public:
     }
 
     bool addAsset(const size_t walletId, const std::string& type,
-                  const std::string& description=0) const {
+                  const std::string& description=0) {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
         auto table = schema.getTable(assetsTable);
@@ -129,7 +129,7 @@ public:
         return true;
     }
 
-    bool removeAsset(const size_t assetId) const {
+    bool removeAsset(const size_t assetId) {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
         auto table = schema.getTable(assetsTable);
@@ -167,7 +167,7 @@ public:
     }
 
     bool addAssetState(const size_t assetId, const int year, const int month, const int day,
-                       const double value, const double income) const {
+                       const double value, const double income) {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
         auto table = schema.getTable(assetStatesTable);
@@ -181,7 +181,7 @@ public:
         return true;
     }
 
-    bool removeAssetState(const size_t assetStateId) const {
+    bool removeAssetState(const size_t assetStateId) {
         auto session = getSession();
         auto schema = session.getSchema(databaseName);
         auto table = schema.getTable(assetStatesTable);

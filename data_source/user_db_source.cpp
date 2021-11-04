@@ -19,4 +19,8 @@ bool UserDbSource::addUser(const std::string& login) {
     return database->addUser(login);
 }
 
+bool UserDbSource::removeUser(const std::string& login) {
+    return database->removeUser(login);
+}
+
 } // my_wallets

@@ -20,6 +20,7 @@ public:
     std::optional<Asset> getAsset(const size_t id) const override;
     bool addAsset(const size_t walletId, const std::string& type,
                   const std::string& description=0) override;
+    bool removeAsset(const size_t id) override;
 private:
     static Asset assetFromDbResults(mysqlx::Row userFromDb) {
         return Asset((int)userFromDb[0], (int)userFromDb[3],

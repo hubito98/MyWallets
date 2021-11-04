@@ -27,4 +27,8 @@ bool AssetDbSource::addAsset(const size_t walletId, const std::string& type,
     return database->addAsset(walletId, type, description);
 }
 
+bool AssetDbSource::removeAsset(const size_t id) {
+    return database->removeAsset(id);
+}
+
 } // my_wallets

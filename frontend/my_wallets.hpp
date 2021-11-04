@@ -32,16 +32,20 @@ public:
       userSource(std::move(userSource)),
       walletSource(std::move(walletSource)) {}
     const std::vector<UserModel> getUsers() const;
-    bool addUser(const std::string& login) const;
+    bool addUser(const std::string& login);
+    bool removeUser(const UserModel& user);
     const std::vector<WalletModel> getUserWallets(const UserModel& userModel) const;
     bool addWallet(const std::string& userLogin, const std::string& name,
                    const std::string& description="");
+    bool removeWallet(const WalletModel& wallet);
     const std::vector<AssetModel> getAssetsFromWallet(const WalletModel& walletModel) const;
     bool addAsset(const size_t walletId, const std::string& type,
-                  const std::string& description=0) const;
+                  const std::string& description=0);
+    bool removeAsset(const AssetModel& asset);
     const std::vector<AssetStateModel> getAssetStatesOfAsset(const AssetModel& assetModel) const;
     bool addAssetState(const size_t assetId, const Date& date, const double value,
-                       const double income) const;
+                       const double income);
+    bool removeAssetState(const AssetStateModel& assetState);
     
     // asset states statistics    
     const model::BasicAssetStatisticModel getBasicAssetStatistics(const AssetModel& assetModel) const;

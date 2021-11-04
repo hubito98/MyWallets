@@ -20,6 +20,7 @@ public:
     std::optional<Wallet> getWallet(const size_t id) const override;
     bool addWallet(const std::string& userLogin, const std::string& name,
                    const std::string& description="") override;
+    bool removeWallet(const size_t id) override;
 private:
     static Wallet walletFromDbResult(const mysqlx::Row& walletFromDb) {
         return Wallet((int)walletFromDb[0], (std::string)walletFromDb[3],

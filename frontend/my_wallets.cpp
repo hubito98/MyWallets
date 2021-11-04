@@ -13,8 +13,12 @@ const std::vector<UserModel> MyWallets::getUsers() const {
     return users;
 }
 
-bool MyWallets::addUser(const std::string& login) const {
+bool MyWallets::addUser(const std::string& login) {
     return userSource->addUser(login);
+}
+
+bool MyWallets::removeUser(const UserModel& user) {
+    return userSource->removeUser(user.getLogin());
 }
 
 const std::vector<WalletModel> MyWallets::getUserWallets(const UserModel& userModel) const {
@@ -32,6 +36,10 @@ bool MyWallets::addWallet(const std::string& userLogin, const std::string& name,
     return walletSource->addWallet(userLogin, name, description);
 }
 
+bool MyWallets::removeWallet(const WalletModel& wallet) {
+    return walletSource->removeWallet(wallet.getId());
+}
+
 const std::vector<AssetModel> MyWallets::getAssetsFromWallet(const WalletModel& walletModel) const {
     const auto walletAssetsData = assetSource->getWalletAssets(walletModel.getId());
     std::vector<AssetModel> walletAssets;
@@ -43,8 +51,12 @@ const std::vector<AssetModel> MyWallets::getAssetsFromWallet(const WalletModel& 
 }
 
 bool MyWallets::addAsset(const size_t walletId, const std::string& type,
-                         const std::string& description) const {
+                         const std::string& description) {
     return assetSource->addAsset(walletId, type, description);
+}
+
+bool MyWallets::removeAsset(const AssetModel& asset) {
+    return assetSource->removeAsset(asset.getId());
 }
 
 const std::vector<AssetStateModel> MyWallets::getAssetStatesOfAsset(const AssetModel& assetModel) const {
@@ -58,8 +70,12 @@ const std::vector<AssetStateModel> MyWallets::getAssetStatesOfAsset(const AssetM
 }
 
 bool MyWallets::addAssetState(const size_t assetId, const Date& date, const double value,
-                              const double income) const {
+                              const double income) {
     return assetStateSource->addAssetState(assetId, date, value, income);
+}
+
+bool MyWallets::removeAssetState(const AssetStateModel& assetState) {
+    return assetStateSource->removeAssetState(assetState.getId());
 }
 
 const model::BasicAssetStatisticModel MyWallets::getBasicAssetStatistics(const AssetModel& assetModel) const {

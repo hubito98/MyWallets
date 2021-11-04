@@ -27,4 +27,8 @@ bool WalletDbSource::addWallet(const std::string& userLogin, const std::string& 
     return database->addWallet(userLogin, name, description);
 }
 
+bool WalletDbSource::removeWallet(const size_t id) {
+    return database->removeWallet(id);
+}
+
 } // my_wallets

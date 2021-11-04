@@ -29,6 +29,8 @@ public:
                     selectUserAction();
                 } else if (choice == 3) {
                     showUsersAction();
+                } else if (choice == 4) {
+                    removeUserAction();
                 } else {
                     break;
                 }
@@ -42,6 +44,8 @@ public:
                     selectWalletAction();
                 } else if (choice == 3) {
                     showWalletsAction();
+                } else if (choice == 4) {
+                    removeWalletAction();
                 } else if (choice == 0) {
                     backToUsersMenu();
                 } else {
@@ -59,6 +63,8 @@ public:
                     showAssetsAction();
                 } else if (choice == 4) {
                     showBasicWalletStatisticsAction();
+                } else if (choice == 5) {
+                    removeAssetAction();
                 } else if (choice == 0) {
                     backToWalletsMenu();
                 } else {
@@ -74,6 +80,8 @@ public:
                     showAssetStatesAction();
                 } else if (choice == 3) {
                     showBasicAssetStatisticsAction();
+                } else if (choice == 4) {
+                    removeAssetStateAction();
                 } else if (choice == 0) {
                     backToAssetsMenu();
                 } else {
@@ -88,10 +96,11 @@ private:
     void showUsersMenu() const {
         std::cout<<std::endl<<"1 - add new user"<<std::endl;
         std::cout<<"2 - select user"<<std::endl;
-        std::cout<<"3 - show users"<<std::endl<<std::endl;
+        std::cout<<"3 - show users"<<std::endl;
+        std::cout<<"4 - remove user"<<std::endl<<std::endl;
     }
 
-    void addUserAction() const {
+    void addUserAction() {
         std::string login;
         std::cout<<"login: ";
         std::getline(std::cin, login);
@@ -129,14 +138,36 @@ private:
         }
     }
 
+    void removeUserAction() {
+        std::cout<<"Choose user to remove:"<<std::endl;
+        const auto users = myWallets->getUsers();
+        for (size_t userNumber = 0; userNumber < users.size(); userNumber++) {
+            std::cout<<userNumber<<" "<<users[userNumber]<<std::endl;
+        }
+        size_t choice;
+        std::cin>>choice;
+        getEOFFromInputStream();
+        if (choice >= users.size()) {
+            std::cout<<"Wrong choice"<<std::endl;
+        } else {
+            bool isSuccess = myWallets->removeUser(users[choice]);
+            if (isSuccess) {
+                std::cout<<"Successfully removed choosed user"<<std::endl;
+            } else {
+                std::cout<<"Failed removing choosed user"<<std::endl;
+            }
+        }
+    }
+
     void showWalletsMenu() const {
         std::cout<<std::endl<<"1 - create wallet"<<std::endl;
         std::cout<<"2 - select wallet"<<std::endl;
         std::cout<<"3 - show wallets"<<std::endl;
+        std::cout<<"4 - remove wallet"<<std::endl;
         std::cout<<"0 - back to previous menu"<<std::endl<<std::endl;
     }
 
-    void addWalletAction() const {
+    void addWalletAction() {
         std::string name, description;
         std::cout<<"name: ";
         std::getline(std::cin, name);
@@ -177,6 +208,27 @@ private:
         }
     }
 
+    void removeWalletAction() {
+        std::cout<<"Choose wallet to remove:"<<std::endl;
+        const auto wallets = myWallets->getUserWallets(*choosedUser);
+        for (size_t walletNumber = 0; walletNumber < wallets.size(); walletNumber++) {
+            std::cout<<walletNumber<<" "<<wallets[walletNumber]<<std::endl;
+        }
+        size_t choice;
+        std::cin>>choice;
+        getEOFFromInputStream();
+        if (choice >= wallets.size()) {
+            std::cout<<"Wrong choice"<<std::endl;
+        } else {
+            bool isSuccess = myWallets->removeWallet(wallets[choice]);
+            if (isSuccess) {
+                std::cout<<"Successfully removed choosed wallet"<<std::endl;
+            } else {
+                std::cout<<"Failed removing choosed wallet"<<std::endl;
+            }
+        }
+    }
+
     void backToUsersMenu() {
         choosedUser.reset();
         currentState = State::USERS_MENU;
@@ -187,10 +239,11 @@ private:
         std::cout<<"2 - select asset"<<std::endl;
         std::cout<<"3 - show assets"<<std::endl;
         std::cout<<"4 - show basic wallet statistics"<<std::endl;
+        std::cout<<"5 - remove asset"<<std::endl;
         std::cout<<"0 - back to previous menu"<<std::endl<<std::endl;
     }
 
-    void addAssetAction() const {
+    void addAssetAction() {
         std::string type, description;
         std::cout<<"type: ";
         std::getline(std::cin, type);
@@ -235,6 +288,27 @@ private:
         std::cout<<myWallets->getBasicWalletStatistics(*choosedWallet)<<std::endl;
     }
 
+    void removeAssetAction() {
+        std::cout<<"Choose asset to remove:"<<std::endl;
+        const auto assets = myWallets->getAssetsFromWallet(*choosedWallet);
+        for (size_t assetNumber = 0; assetNumber < assets.size(); assetNumber++) {
+            std::cout<<assetNumber<<" "<<assets[assetNumber]<<std::endl;
+        }
+        size_t choice;
+        std::cin>>choice;
+        getEOFFromInputStream();
+        if (choice >= assets.size()) {
+            std::cout<<"Wrong choice"<<std::endl;
+        } else {
+            bool isSuccess = myWallets->removeAsset(assets[choice]);
+            if (isSuccess) {
+                std::cout<<"Successfully removed choosed asset"<<std::endl;
+            } else {
+                std::cout<<"Failed removing choosed asset"<<std::endl;
+            }
+        }
+    }
+
     void backToWalletsMenu() {
         choosedWallet.reset();
         currentState = State::WALLETS_MENU;
@@ -244,10 +318,11 @@ private:
         std::cout<<std::endl<<"1 - create asset state"<<std::endl;
         std::cout<<"2 - show asset states"<<std::endl;
         std::cout<<"3 - show basic asset statistics"<<std::endl;
+        std::cout<<"4 - remove asset state"<<std::endl;
         std::cout<<"0 - back to previous menu"<<std::endl<<std::endl;
     }
 
-    void addAssetStateAction() const {
+    void addAssetStateAction() {
         size_t year, month, day;
         double value, income;
         std::cout<<"year: ";
@@ -283,8 +358,30 @@ private:
             std::cout<<assetState<<std::endl;
         }
     }
+
     void showBasicAssetStatisticsAction() const {
         std::cout<<myWallets->getBasicAssetStatistics(*choosedAsset)<<std::endl;
+    }
+
+    void removeAssetStateAction() {
+        std::cout<<"Choose asset state to remove:"<<std::endl;
+        const auto assetStates = myWallets->getAssetStatesOfAsset(*choosedAsset);
+        for (size_t assetStateNumber = 0; assetStateNumber < assetStates.size(); assetStateNumber++) {
+            std::cout<<assetStateNumber<<" "<<assetStates[assetStateNumber]<<std::endl;
+        }
+        size_t choice;
+        std::cin>>choice;
+        getEOFFromInputStream();
+        if (choice >= assetStates.size()) {
+            std::cout<<"Wrong choice"<<std::endl;
+        } else {
+            bool isSuccess = myWallets->removeAssetState(assetStates[choice]);
+            if (isSuccess) {
+                std::cout<<"Successfully removed choosed asset state"<<std::endl;
+            } else {
+                std::cout<<"Failed removing choosed asset state"<<std::endl;
+            }
+        }
     }
 
     void backToAssetsMenu() {

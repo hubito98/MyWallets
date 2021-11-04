@@ -27,4 +27,8 @@ bool AssetStateDbSource::addAssetState(const size_t assetId, const Date& date, c
     return database->addAssetState(assetId, date.getYear(), date.getMonth(), date.getDay(), value, income);
 }
 
+bool AssetStateDbSource::removeAssetState(const size_t id) {
+    return database->removeAssetState(id);
+}
+
 } // my_wallets
