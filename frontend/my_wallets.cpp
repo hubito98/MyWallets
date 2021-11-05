@@ -13,6 +13,14 @@ const std::vector<UserModel> MyWallets::getUsers() const {
     return users;
 }
 
+std::optional<UserModel> MyWallets::getUser(const std::string& login) const {
+    const auto userFromSource = userSource->getUser(login);
+    if (userFromSource.has_value()) {
+        return UserModel(userFromSource.value());
+    }
+    return {};
+}
+
 bool MyWallets::addUser(const std::string& login) {
     return userSource->addUser(login);
 }

@@ -32,6 +32,7 @@ public:
       userSource(std::move(userSource)),
       walletSource(std::move(walletSource)) {}
     const std::vector<UserModel> getUsers() const;
+    std::optional<UserModel> getUser(const std::string& login) const;
     bool addUser(const std::string& login);
     bool removeUser(const UserModel& user);
     const std::vector<WalletModel> getUserWallets(const UserModel& userModel) const;

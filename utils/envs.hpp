@@ -11,6 +11,10 @@ struct DatabaseNameEnvVar {
     static constexpr const char* defaultValue = "test_db";
 };
 
+struct ExecuteTypeEnvVar {
+    static constexpr const char* envName = "EXECUTE_TYPE";
+    static constexpr const char* defaultValue = "cli";
+};
 
 std::string getEnv(const std::string& envName, const std::string& defaultValue="") {
     auto envValue = std::getenv(envName.c_str());
