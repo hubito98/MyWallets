@@ -59,6 +59,21 @@ public:
                 }
                 res << result.dump();
             });
+        multiplexer.handle("/assets/{id:\\d+}")
+            .get([this](served::response& res, const served::request& req) {
+                const auto assetId = std::stoi(req.params["id"]);
+                const auto asset = this->myWallets->getAsset(assetId);
+                nlohmann::json result;
+                if (asset.has_value()) {
+                    result["asset"] = asset->toJson();
+                    std::vector<nlohmann::json> assetStates;
+                    for (const auto& assetState : this->myWallets->getAssetStatesOfAsset(asset.value())) {
+                        assetStates.push_back(assetState.toJson());
+                    }
+                    result["assetStates"] = assetStates;
+                }
+                res << result.dump();
+            });
     }
 
     void run() {

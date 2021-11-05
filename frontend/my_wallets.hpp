@@ -45,6 +45,7 @@ public:
                   const std::string& description=0);
     bool removeAsset(const AssetModel& asset);
     const std::vector<AssetStateModel> getAssetStatesOfAsset(const AssetModel& assetModel) const;
+    std::optional<AssetModel> getAsset(const size_t id) const;
     bool addAssetState(const size_t assetId, const Date& date, const double value,
                        const double income);
     bool removeAssetState(const AssetStateModel& assetState);

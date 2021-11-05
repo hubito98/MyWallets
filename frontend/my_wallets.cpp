@@ -66,6 +66,14 @@ const std::vector<AssetModel> MyWallets::getAssetsFromWallet(const WalletModel& 
     return walletAssets;
 }
 
+std::optional<AssetModel> MyWallets::getAsset(const size_t id) const {
+    const auto assetFromSource = assetSource->getAsset(id);
+    if (assetFromSource.has_value()) {
+        return AssetModel(assetFromSource.value());
+    }
+    return {};
+}
+
 bool MyWallets::addAsset(const size_t walletId, const std::string& type,
                          const std::string& description) {
     return assetSource->addAsset(walletId, type, description);
