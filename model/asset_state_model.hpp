@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include "nlohmann/json.hpp"
+
 #include "entity/asset_state.hpp"
 #include "date_handling/date.hpp"
 
@@ -24,6 +26,16 @@ public:
                 <<", value: "<<assetStateModel.value<<", income: "<<assetStateModel.income<<" }";
         return os;
     }
+
+    nlohmann::json toJson() const {
+        nlohmann::json assetStateJson;
+        assetStateJson["id"] = id;
+        assetStateJson["date"] = date.toJson();
+        assetStateJson["value"] = value;
+        assetStateJson["income"] = income;
+        return assetStateJson;
+    }
+
 private:
     size_t id;
     Date date;

@@ -4,6 +4,8 @@
 #include <string>
 #include <ctime>
 
+#include "nlohmann/json.hpp"
+
 namespace my_wallets {
 
 class Date {
@@ -13,6 +15,14 @@ public:
 
     std::string asString() const {
         return std::to_string(day) + "-" + std::to_string(month) + "-" + std::to_string(year);
+    }
+
+    nlohmann::json toJson() const {
+        nlohmann::json dateJson;
+        dateJson["year"] = year;
+        dateJson["month"] = month;
+        dateJson["day"] = day;
+        return dateJson;
     }
 
     size_t getYear() const {

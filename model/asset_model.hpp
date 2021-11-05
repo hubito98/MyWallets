@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include "nlohmann/json.hpp"
+
 #include "entity/asset.hpp"
 
 namespace my_wallets {
@@ -21,6 +23,15 @@ public:
         os << "Asset { id: " << assetModel.id << ", type: "<<assetModel.type<<", description: "<<assetModel.description<<" }";
         return os;
     }
+
+    nlohmann::json toJson() const {
+        nlohmann::json assetJson;
+        assetJson["id"] = id;
+        assetJson["type"] = type;
+        assetJson["description"] = description;
+        return assetJson;
+    }
+
 private:
     size_t id;
     std::string type;

@@ -39,6 +39,14 @@ const std::vector<WalletModel> MyWallets::getUserWallets(const UserModel& userMo
     return userWallets;
 }
 
+std::optional<WalletModel> MyWallets::getWallet(const size_t id) const {
+    const auto walletFromSource = walletSource->getWallet(id);
+    if (walletFromSource.has_value()) {
+        return WalletModel(walletFromSource.value());
+    }
+    return {};
+}
+
 bool MyWallets::addWallet(const std::string& userLogin, const std::string& name,
                           const std::string& description) {
     return walletSource->addWallet(userLogin, name, description);

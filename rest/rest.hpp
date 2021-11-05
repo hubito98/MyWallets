@@ -25,11 +25,11 @@ public:
                 const auto user = this->myWallets->getUser(login);
                 nlohmann::json result;
                 if (user.has_value()) {
+                    result["user"] = user->toJson();
                     std::vector<nlohmann::json> userWallets;
                     for (const auto& wallet : this->myWallets->getUserWallets(user.value())) {
                         userWallets.push_back(wallet.toJson());
                     }
-                    result["user"] = user->toJson();
                     result["wallets"] = userWallets;
                 }
                 res << result.dump();
@@ -44,10 +44,25 @@ public:
                 result["users"] = users;
                 res << result.dump();
             });
+        multiplexer.handle("/wallets/{id:\\d+}")
+            .get([this](served::response& res, const served::request& req) {
+                const auto walletId = std::stoi(req.params["id"]);
+                const auto wallet = this->myWallets->getWallet(walletId);
+                nlohmann::json result;
+                if (wallet.has_value()) {
+                    result["wallet"] = wallet->toJson();
+                    std::vector<nlohmann::json> assetsFromWallet;
+                    for (const auto& asset : this->myWallets->getAssetsFromWallet(wallet.value())) {
+                        assetsFromWallet.push_back(asset.toJson());
+                    }
+                    result["assets"] = assetsFromWallet;
+                }
+                res << result.dump();
+            });
     }
 
     void run() {
-        server.run(1);        
+        server.run(1);
     }
 private:
     std::unique_ptr<frontend::MyWallets> myWallets;

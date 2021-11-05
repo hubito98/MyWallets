@@ -40,6 +40,7 @@ public:
                    const std::string& description="");
     bool removeWallet(const WalletModel& wallet);
     const std::vector<AssetModel> getAssetsFromWallet(const WalletModel& walletModel) const;
+    std::optional<WalletModel> getWallet(const size_t id) const;
     bool addAsset(const size_t walletId, const std::string& type,
                   const std::string& description=0);
     bool removeAsset(const AssetModel& asset);
