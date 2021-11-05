@@ -84,6 +84,16 @@ public:
                 }
                 res << result.dump();
             });
+        multiplexer.handle("/asset-statistics/{id:\\d+}")
+            .get([this](served::response& res, const served::request& req) {
+                const auto assetId = std::stoi(req.params["id"]);
+                const auto asset = this->myWallets->getAsset(assetId);
+                nlohmann::json result;
+                if (asset.has_value()) {
+                    result["basicAssetStatistics"] = this->myWallets->getBasicAssetStatistics(asset.value()).toJson();
+                }
+                res << result.dump();
+            });
     }
 
     void run() {

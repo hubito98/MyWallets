@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 
+#include "nlohmann/json.hpp"
+
 #include "entity/asset.hpp"
 #include "entity/asset_state.hpp"
 #include "date_handling/date.hpp"
@@ -26,6 +28,21 @@ public:
         return os;
     }
 
+    nlohmann::json toJson() const {
+        nlohmann::json assetStatJson;
+        assetStatJson["assetType"] = assetType;
+        assetStatJson["sumOfIncomes"] = sumOfIncomes;
+        assetStatJson["newestAssetValue"] = newestAssetValue;
+        std::vector<nlohmann::json> assetStateStatsJson;
+        std::transform(assetStateStats.begin(), assetStateStats.end(), std::back_inserter(assetStateStatsJson),
+                [](const SingleAssetStateStat& assetStateStat) {
+            return assetStateStat.toJson();
+        });
+        assetStatJson["assetStateStats"] = assetStateStatsJson;
+        return assetStatJson;
+    }
+
+
 private:
     struct SingleAssetStateStat {
         Date date;
@@ -34,6 +51,17 @@ private:
         double growth;
         double growthInPercent;
         double growthInPercentScaledByYear;
+
+        nlohmann::json toJson() const {
+            nlohmann::json statJson;
+            statJson["date"] = date.toJson();
+            statJson["value"] = value;
+            statJson["income"] = income;
+            statJson["growth"] = growth;
+            statJson["growthInPercent"] = growthInPercent;
+            statJson["growthInPercentScaledByYear"] = growthInPercentScaledByYear;
+            return statJson;
+        }
     };
 
     void calculateAssetStateStats(const std::vector<AssetState>& assetStates);
