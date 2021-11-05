@@ -74,6 +74,16 @@ public:
                 }
                 res << result.dump();
             });
+        multiplexer.handle("/wallet-statistics/{id:\\d+}")
+            .get([this](served::response& res, const served::request& req) {
+                const auto walletId = std::stoi(req.params["id"]);
+                const auto wallet = this->myWallets->getWallet(walletId);
+                nlohmann::json result;
+                if (wallet.has_value()) {
+                    result["basicWalletStatistics"] = this->myWallets->getBasicWalletStatistics(wallet.value()).toJson();
+                }
+                res << result.dump();
+            });
     }
 
     void run() {
