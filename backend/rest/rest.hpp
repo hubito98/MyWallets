@@ -21,6 +21,7 @@ public:
     void setupEndpoints() {
         multiplexer.handle("/users/{login}")
             .get([this](served::response& res, const served::request& req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
                 const std::string login = req.params["login"];
                 const auto user = this->myWallets->getUser(login);
                 nlohmann::json result;
@@ -36,6 +37,7 @@ public:
             });
         multiplexer.handle("/users")
             .get([this](served::response & res, const served::request & req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
                 std::vector<nlohmann::json> users;
                 for (const auto& user : this->myWallets->getUsers()) {
                     users.push_back(user.toJson());
@@ -46,6 +48,7 @@ public:
             });
         multiplexer.handle("/wallets/{id:\\d+}")
             .get([this](served::response& res, const served::request& req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
                 const auto walletId = std::stoi(req.params["id"]);
                 const auto wallet = this->myWallets->getWallet(walletId);
                 nlohmann::json result;
@@ -61,6 +64,7 @@ public:
             });
         multiplexer.handle("/assets/{id:\\d+}")
             .get([this](served::response& res, const served::request& req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
                 const auto assetId = std::stoi(req.params["id"]);
                 const auto asset = this->myWallets->getAsset(assetId);
                 nlohmann::json result;
@@ -76,6 +80,7 @@ public:
             });
         multiplexer.handle("/wallet-statistics/{id:\\d+}")
             .get([this](served::response& res, const served::request& req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
                 const auto walletId = std::stoi(req.params["id"]);
                 const auto wallet = this->myWallets->getWallet(walletId);
                 nlohmann::json result;
@@ -86,6 +91,7 @@ public:
             });
         multiplexer.handle("/asset-statistics/{id:\\d+}")
             .get([this](served::response& res, const served::request& req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
                 const auto assetId = std::stoi(req.params["id"]);
                 const auto asset = this->myWallets->getAsset(assetId);
                 nlohmann::json result;
