@@ -47,6 +47,14 @@ public:
                 nlohmann::json result;
                 result["users"] = users;
                 res << result.dump();
+            })
+            .post([this](served::response & res, const served::request & req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
+                nlohmann::json userInputJson = nlohmann::json::parse(req.body());
+                std::cout<<req.body()<<std::endl;
+                if (userInputJson["login"] != nullptr) {
+                    this->myWallets->addUser(userInputJson["login"]);
+                }
             });
         multiplexer.handle("/wallets/{id:\\d+}")
             .get([this](served::response& res, const served::request& req) {

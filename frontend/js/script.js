@@ -16,6 +16,7 @@ function loadUsersMenu() {
     }).then(function(usersJSON) {
         addUsersToTable(usersJSON);
     });
+    prepareUserForm();
 }
 
 function prepareTableForUsers() {
@@ -41,6 +42,42 @@ function addUserTableRow(user) {
     $("#menu table tbody").append(tr);
 }
 
+function prepareUserForm() {
+    prepareForm();
+    var loginLabel = $("<label></label>")
+            .text("Login:")
+            .attr("for", "user-login")
+            .attr("class", "form-label");
+    var loginInput = $("<input>")
+            .attr("type", "text")
+            .attr("class", "form-control")
+            .attr("id", "user-login");
+    var loginDiv = $("<div></div>")
+            .attr("class", "mb-3")
+            .append(loginLabel, loginInput);
+    var submitButton = $("<button></button>")
+            .attr("class", "btn btn-primary")
+            .attr("type", "button")
+            .attr("onclick", "addUser()")
+            .text("Add user");
+    $("#form form").append(loginDiv, submitButton);
+}
+
+// add user
+
+function addUser() {
+    var login = $.trim($("#user-login").val());
+    if (login.length != 0) {
+        $.ajax({
+            url: restAddress + "/users/",
+            type: 'POST',
+            data: "{\"login\": \"" + login + "\"}" 
+        }).then(function(userJSON) {
+        });
+        loadUsersMenu();
+    }
+}
+
 // user details
 
 function loadUserDetails(login) {
@@ -53,6 +90,7 @@ function loadUserDetails(login) {
         addUserInfo(userJSON.user);
         prepareTableForWallets();
         addWalletsToTable(userJSON.wallets);
+        setId(login);
     });
 }
 
@@ -154,6 +192,7 @@ function loadWalletDetails(walletId) {
         addWalletInfo(walletJSON.wallet);
         prepareTableForAssets();
         addAssetsToTable(walletJSON.assets);
+        setId(walletId);
     });
 }
 
@@ -237,6 +276,7 @@ function loadAssetDetails(assetId) {
         addAssetInfo(assetJSON.asset)
         prepareTableForAssetStates();
         addAssetStatesToTable(assetJSON.assetStates);
+        setId(assetId);
     });
 }
 
@@ -275,6 +315,8 @@ function addAssetStatesToTable(assetStates) {
 function clear() {
     clearMenu();
     clearContent();
+    clearForm();
+    setId("");
 }
 
 function clearMenu() {
@@ -285,6 +327,10 @@ function clearContent() {
     $("#content").empty();
 }
 
+function clearForm() {
+    $("#form").empty();
+}
+
 function prepareTable() {
     var table = $("<table></table>")
             .attr("class", "table table-hover");
@@ -292,4 +338,14 @@ function prepareTable() {
     var tbody = $("<tbody></tbody>");
     table.append(thead, tbody);
     $("#menu").append(table);
+}
+
+function prepareForm() {
+    var form = $("<form></form>")
+            .attr("style", ";width: 80%; margin-left: auto; margin-right: auto; margin-top: 100px;");
+    $("#form").append(form);
+}
+
+function setId(id) {
+    $("#id").text(id);
 }
