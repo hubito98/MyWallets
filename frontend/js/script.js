@@ -159,7 +159,7 @@ function prepareWalletForm() {
             .attr("class", "btn btn-primary")
             .attr("type", "button")
             .attr("onclick", "addWallet()")
-            .text("Add user");
+            .text("Add wallet");
     $("#form form").append(nameDiv, descriptionDiv, submitButton);
 }
 
@@ -315,7 +315,7 @@ function prepareAssetForm() {
             .attr("class", "btn btn-primary")
             .attr("type", "button")
             .attr("onclick", "addAsset()")
-            .text("Add user");
+            .text("Add asset");
     $("#form form").append(typeDiv, descriptionDiv, submitButton);
 }
 
@@ -381,6 +381,7 @@ function loadAssetDetails(assetId) {
         addAssetStatesToTable(assetJSON.assetStates);
         setId(assetId);
     });
+    prepareAssetStateForm();
 }
 
 function addAssetInfo(asset) {
@@ -412,6 +413,77 @@ function addAssetStatesToTable(assetStates) {
         $("#menu table tbody").append(tr);
     });
 }
+
+function prepareAssetStateForm() {
+    prepareForm();
+    var dateLabel = $("<label></label>")
+            .text("Asset state date:")
+            .attr("for", "asset-state-date")
+            .attr("class", "form-label");
+    var dateInput = $("<input>")
+            .attr("type", "date")
+            .attr("class", "form-control")
+            .attr("id", "asset-state-date");
+    var dateDiv = $("<div></div>")
+            .attr("class", "mb-3")
+            .append(dateLabel, dateInput);
+            var valueLabel = $("<label></label>")
+            .text("Asset state value:")
+            .attr("for", "asset-state-value")
+            .attr("class", "form-label");
+    var valueInput = $("<input>")
+            .attr("type", "number")
+            .attr("class", "form-control")
+            .attr("id", "asset-state-value");
+    var valueDiv = $("<div></div>")
+            .attr("class", "mb-3")
+            .append(valueLabel, valueInput);
+    var incomeLabel = $("<label></label>")
+            .text("Asset state income:")
+            .attr("for", "asset-state-income")
+            .attr("class", "form-label");
+    var incomeInput = $("<input>")
+            .attr("type", "number")
+            .attr("class", "form-control")
+            .attr("id", "asset-state-income")
+    var incomeDiv = $("<div></div>")
+            .attr("class", "mb-3")
+            .append(incomeLabel, incomeInput);
+    var submitButton = $("<button></button>")
+            .attr("class", "btn btn-primary")
+            .attr("type", "button")
+            .attr("onclick", "addAssetState()")
+            .text("Add asset state");
+    $("#form form").append(dateDiv, valueDiv, incomeDiv, submitButton);
+}
+
+// add asset state
+
+function addAssetState() {
+    var dateInput = $.trim($("#asset-state-date").val());
+    var valueInput = $.trim($("#asset-state-value").val());
+    var incomeInput = $.trim($("#asset-state-income").val());
+    if (dateInput.length != 0 && valueInput.length != 0
+            && incomeInput.length != 0) {
+        var date = new Date(dateInput);
+        var value = parseFloat(valueInput);
+        var income = parseFloat(incomeInput);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var assetId = parseInt(getId());
+        var inputJson = {"date": {"year": year, "month": month, "day": day},
+                         "value": value, "income": income, "assetId": assetId};
+        $.ajax({
+            url: restAddress + "/asset-states/",
+            type: 'POST',
+            data: JSON.stringify(inputJson)
+        }).then(function(data) {
+        });
+        loadAssetDetails(assetId);
+    }
+}
+
 
 // utils
 
