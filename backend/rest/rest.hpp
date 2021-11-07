@@ -4,6 +4,7 @@
 
 #include <served/served.hpp>
 #include "nlohmann/json.hpp"
+#include "date_handling/date.hpp"
 
 #include "frontend/my_wallets.hpp"
 
@@ -111,6 +112,22 @@ public:
                     this->myWallets->addAsset(assetInputJson["walletId"],
                                               assetInputJson["type"],
                                               assetInputJson["description"]);
+                }
+            });
+        multiplexer.handle("/asset-states")
+            .post([this](served::response & res, const served::request & req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
+                nlohmann::json assetStateInputJson = nlohmann::json::parse(req.body());
+                if (assetStateInputJson["assetId"] != nullptr &&
+                        assetStateInputJson["date"] != nullptr &&
+                        assetStateInputJson["value"] != nullptr &&
+                        assetStateInputJson["income"] != nullptr) {
+                    const auto dateJson = assetStateInputJson["date"];
+                    Date date(dateJson["year"], dateJson["month"], dateJson["day"]);
+                    this->myWallets->addAssetState(assetStateInputJson["assetId"],
+                                                   date,
+                                                   assetStateInputJson["value"],
+                                                   assetStateInputJson["income"]);
                 }
             });
         multiplexer.handle("/wallet-statistics/{id:\\d+}")
