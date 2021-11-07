@@ -76,7 +76,6 @@ public:
             .post([this](served::response & res, const served::request & req) {
                 res.set_header("Access-Control-Allow-Origin", "*");
                 nlohmann::json walletInputJson = nlohmann::json::parse(req.body());
-                std::cout<<req.body()<<std::endl;
                 if (walletInputJson["userLogin"] != nullptr &&
                         walletInputJson["name"] != nullptr &&
                         walletInputJson["description"] != nullptr) {
@@ -101,6 +100,18 @@ public:
                     result["assetStates"] = assetStates;
                 }
                 res << result.dump();
+            });
+        multiplexer.handle("/assets")
+            .post([this](served::response & res, const served::request & req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
+                nlohmann::json assetInputJson = nlohmann::json::parse(req.body());
+                if (assetInputJson["walletId"] != nullptr &&
+                        assetInputJson["type"] != nullptr &&
+                        assetInputJson["description"] != nullptr) {
+                    this->myWallets->addAsset(assetInputJson["walletId"],
+                                              assetInputJson["type"],
+                                              assetInputJson["description"]);
+                }
             });
         multiplexer.handle("/wallet-statistics/{id:\\d+}")
             .get([this](served::response& res, const served::request& req) {

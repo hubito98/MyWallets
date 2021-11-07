@@ -132,7 +132,6 @@ function addWalletsToTable(wallets) {
 }
 
 function prepareWalletForm() {
-    var name, description;
     prepareForm();
     var nameLabel = $("<label></label>")
             .text("Wallet name:")
@@ -247,6 +246,7 @@ function loadWalletDetails(walletId) {
         addAssetsToTable(walletJSON.assets);
         setId(walletId);
     });
+    prepareAssetForm();
 }
 
 function addWalletInfo(wallet) {
@@ -285,6 +285,56 @@ function addAssetsToTable(assets) {
         var tr = $("<tr></tr>").append(typeCell, descriptionCell, actionsCell);
         $("#menu table tbody").append(tr);
     });
+}
+
+function prepareAssetForm() {
+    prepareForm();
+    var typeLabel = $("<label></label>")
+            .text("Asset type:")
+            .attr("for", "asset-type")
+            .attr("class", "form-label");
+    var typeInput = $("<input>")
+            .attr("type", "text")
+            .attr("class", "form-control")
+            .attr("id", "asset-type");
+    var typeDiv = $("<div></div>")
+            .attr("class", "mb-3")
+            .append(typeLabel, typeInput);
+    var descriptionLabel = $("<label></label>")
+            .text("Asset description:")
+            .attr("for", "asset-description")
+            .attr("class", "form-label");
+    var descriptionInput = $("<input>")
+            .attr("type", "text")
+            .attr("class", "form-control")
+            .attr("id", "asset-description");
+    var descriptionDiv = $("<div></div>")
+            .attr("class", "mb-3")
+            .append(descriptionLabel, descriptionInput);
+    var submitButton = $("<button></button>")
+            .attr("class", "btn btn-primary")
+            .attr("type", "button")
+            .attr("onclick", "addAsset()")
+            .text("Add user");
+    $("#form form").append(typeDiv, descriptionDiv, submitButton);
+}
+
+// add asset
+
+function addAsset() {
+    var type = $.trim($("#asset-type").val());
+    var description = $.trim($("#asset-description").val());
+    if (type.length != 0) {
+        var inputJson = {"type": type, "description": description,
+                         "walletId": parseInt(getId())};
+        $.ajax({
+            url: restAddress + "/assets/",
+            type: 'POST',
+            data: JSON.stringify(inputJson)
+        }).then(function(data) {
+        });
+        loadWalletDetails(parseInt(getId()));
+    }
 }
 
 // asset statistics
