@@ -10,9 +10,10 @@ function loadUsersMenu() {
     clear();
     prepareTableForUsers();
     $.ajax({
-        url: restAddress + "/users"
-    }).then(function(data) {
-        usersJSON = jQuery.parseJSON(data);
+        url: restAddress + "/users",
+        type: 'GET',
+        datatype: 'json'
+    }).then(function(usersJSON) {
         addUsersToTable(usersJSON);
     });
 }
@@ -45,9 +46,10 @@ function addUserTableRow(user) {
 function loadUserDetails(login) {
     clear();
     $.ajax({
-        url: restAddress + "/users/" + login
-    }).then(function(data) {
-        userJSON = jQuery.parseJSON(data);
+        url: restAddress + "/users/" + login,
+        type: 'GET',
+        datatype: 'json'
+    }).then(function(userJSON) {
         addUserInfo(userJSON.user);
         prepareTableForWallets();
         addWalletsToTable(userJSON.wallets);
@@ -57,7 +59,7 @@ function loadUserDetails(login) {
 function addUserInfo(user) {
     var login = user.login;
     var header = $("<h3></h3>")
-            .text(login + " wallets");
+            .text(login);
     $("#menu").append(header);
 }
 
@@ -93,24 +95,25 @@ function addWalletsToTable(wallets) {
 
 function loadWalletStatistics(walletId) {
     $.ajax({
-        url: restAddress + "/wallet-statistics/" + walletId
-    }).then(function(data) {
-        statsJSON = jQuery.parseJSON(data).basicWalletStatistics;
+        url: restAddress + "/wallet-statistics/" + walletId,
+        type: 'GET',
+        datatype: 'json'
+    }).then(function(statsJSON) {
         clearContent();
-        addWalletStatsOverallInfo(statsJSON.walletName, statsJSON.wholeWalletValue);
-        addPieChart(statsJSON.assetStats);
+        addWalletStatsOverallInfo(statsJSON.basicWalletStatistics.walletName, statsJSON.basicWalletStatistics.wholeWalletValue);
+        addWalletChart(statsJSON.basicWalletStatistics.assetStats);
     });
 }
 
 function addWalletStatsOverallInfo(walletName, wholeWalletValue) {
     var header = $("<h4></h4>")
-            .text(walletName + " statistics");
+            .text(walletName);
     var walletInfo = $("<p></p>")
             .text("Wallet value: " + wholeWalletValue);
     $("#content").append(header, walletInfo);
 }
 
-function addPieChart(assetStats) {
+function addWalletChart(assetStats) {
     var assetTypes = [];
     var assetValues = [];
     var colors = [];
@@ -143,7 +146,128 @@ function addPieChart(assetStats) {
 
 function loadWalletDetails(walletId) {
     clear();
-    $("#menu").text("wallet details will be here");
+    $.ajax({
+        url: restAddress + "/wallets/" + walletId,
+        type: 'GET',
+        datatype: 'json'
+    }).then(function(walletJSON) {
+        addWalletInfo(walletJSON.wallet);
+        prepareTableForAssets();
+        addAssetsToTable(walletJSON.assets);
+    });
+}
+
+function addWalletInfo(wallet) {
+    var name = wallet.name;
+    var description = wallet.description;
+    var header = $("<h3></h3>")
+            .text(name);
+    var descriptionParagraph = $("<p></p>")
+            .text(description);
+    $("#menu").append(header, descriptionParagraph);
+}
+
+function prepareTableForAssets() {
+    prepareTable();
+    var headRow = $("<tr><th scope=\"col\">Type</th><th scope=\"col\">Description</th><th scope=\"col\">Actions</th></tr>")
+    $("#menu table thead").append(headRow);
+}
+
+function addAssetsToTable(assets) {
+    assets.forEach(function (asset) {
+        var typeCell = $("<td></td>")
+                .text(asset.type);
+        var descriptionCell = $("<td></td>")
+                .text(asset.description);
+        var statsButton = $("<button></button>")
+                .attr("type", "button")
+                .attr("class", "btn btn-light btn-sm")
+                .attr("onclick", "loadAssetStatistics(" + asset.id + ")")
+                .text("Statistics");
+        var detailsButton = $("<button></button>")
+                .attr("type", "button")
+                .attr("class", "btn btn-light btn-sm")
+                .attr("onclick", "loadAssetDetails(" + asset.id + ")")
+                .text("Details");
+        var actionsCell = $("<td></td>").append(statsButton, detailsButton);
+        var tr = $("<tr></tr>").append(typeCell, descriptionCell, actionsCell);
+        $("#menu table tbody").append(tr);
+    });
+}
+
+// asset statistics
+
+function loadAssetStatistics(assetId) {
+    $.ajax({
+        url: restAddress + "/asset-statistics/" + assetId,
+        type: 'GET',
+        datatype: 'json'
+    }).then(function(statsJSON) {
+        clearContent();
+        addAssetStatsOverallInfo(statsJSON.basicAssetStatistics.assetType,
+                                 statsJSON.basicAssetStatistics.newestAssetValue,
+                                 statsJSON.basicAssetStatistics.sumOfIncomes);
+        addAssetChart(statsJSON.basicAssetStatistics.assetStateStats);
+    });
+}
+
+function addAssetStatsOverallInfo(assetType, newestAssetValue, sumOfIncomes) {
+    var header = $("<h4></h4>")
+            .text(assetType);
+    var assetValue = $("<p></p>")
+            .text("Asset value: " + newestAssetValue);
+    var assetIncomes = $("<p></p>")
+            .text("Sum of incomes: " + sumOfIncomes);
+    $("#content").append(header, assetValue, assetIncomes);
+}
+
+function addAssetChart(assetStateStats) {
+    $("#content").append(JSON.stringify(assetStateStats));
+}
+
+// asset details
+
+function loadAssetDetails(assetId) {
+    clear();
+    $.ajax({
+        url: restAddress + "/assets/" + assetId,
+        type: 'GET',
+        datatype: 'json'
+    }).then(function(assetJSON) {
+        addAssetInfo(assetJSON.asset)
+        prepareTableForAssetStates();
+        addAssetStatesToTable(assetJSON.assetStates);
+    });
+}
+
+function addAssetInfo(asset) {
+    var type = asset.type;
+    var description = asset.description;
+    var header = $("<h3></h3>")
+            .text(type);
+    var descriptionParagraph = $("<p></p>")
+            .text(description);
+    $("#menu").append(header, descriptionParagraph);
+}
+
+function prepareTableForAssetStates() {
+    prepareTable();
+    var headRow = $("<tr><th scope=\"col\">Date</th><th scope=\"col\">Value</th><th scope=\"col\">Income</th><th scope=\"col\">Actions</th></tr>")
+    $("#menu table thead").append(headRow);
+}
+
+function addAssetStatesToTable(assetStates) {
+    assetStates.forEach(function (assetState) {
+        var dateCell = $("<td></td>")
+                .text(assetState.date.day + "-" + assetState.date.month + "-" + assetState.date.year);
+        var valueCell = $("<td></td>")
+                .text(assetState.value);
+        var incomeCell = $("<td></td>")
+                .text(assetState.income);
+        var actionsCell = $("<td></td>");
+        var tr = $("<tr></tr>").append(dateCell, valueCell, incomeCell, actionsCell);
+        $("#menu table tbody").append(tr);
+    });
 }
 
 // utils
