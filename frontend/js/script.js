@@ -68,11 +68,12 @@ function prepareUserForm() {
 function addUser() {
     var login = $.trim($("#user-login").val());
     if (login.length != 0) {
+        var inputJson = {"login": login};
         $.ajax({
             url: restAddress + "/users/",
             type: 'POST',
-            data: "{\"login\": \"" + login + "\"}" 
-        }).then(function(userJSON) {
+            data: JSON.stringify(inputJson)
+        }).then(function(data) {
         });
         loadUsersMenu();
     }
@@ -92,6 +93,7 @@ function loadUserDetails(login) {
         addWalletsToTable(userJSON.wallets);
         setId(login);
     });
+    prepareWalletForm();
 }
 
 function addUserInfo(user) {
@@ -128,6 +130,57 @@ function addWalletsToTable(wallets) {
         $("#menu table tbody").append(tr);
     });
 }
+
+function prepareWalletForm() {
+    var name, description;
+    prepareForm();
+    var nameLabel = $("<label></label>")
+            .text("Wallet name:")
+            .attr("for", "wallet-name")
+            .attr("class", "form-label");
+    var nameInput = $("<input>")
+            .attr("type", "text")
+            .attr("class", "form-control")
+            .attr("id", "wallet-name");
+    var nameDiv = $("<div></div>")
+            .attr("class", "mb-3")
+            .append(nameLabel, nameInput);
+    var descriptionLabel = $("<label></label>")
+            .text("Wallet description:")
+            .attr("for", "wallet-description")
+            .attr("class", "form-label");
+    var descriptionInput = $("<input>")
+            .attr("type", "text")
+            .attr("class", "form-control")
+            .attr("id", "wallet-description");
+    var descriptionDiv = $("<div></div>")
+            .attr("class", "mb-3")
+            .append(descriptionLabel, descriptionInput);
+    var submitButton = $("<button></button>")
+            .attr("class", "btn btn-primary")
+            .attr("type", "button")
+            .attr("onclick", "addWallet()")
+            .text("Add user");
+    $("#form form").append(nameDiv, descriptionDiv, submitButton);
+}
+
+// add wallet
+
+function addWallet() {
+    var name = $.trim($("#wallet-name").val());
+    var description = $.trim($("#wallet-description").val());
+    if (name.length != 0) {
+        var inputJson = {"name": name, "description": description, "userLogin": getId()};
+        $.ajax({
+            url: restAddress + "/wallets/",
+            type: 'POST',
+            data: JSON.stringify(inputJson)
+        }).then(function(data) {
+        });
+        loadUserDetails(getId());
+    }
+}
+
 
 // wallet statistics
 
@@ -348,4 +401,8 @@ function prepareForm() {
 
 function setId(id) {
     $("#id").text(id);
+}
+
+function getId() {
+    return $("#id").text();
 }

@@ -51,7 +51,6 @@ public:
             .post([this](served::response & res, const served::request & req) {
                 res.set_header("Access-Control-Allow-Origin", "*");
                 nlohmann::json userInputJson = nlohmann::json::parse(req.body());
-                std::cout<<req.body()<<std::endl;
                 if (userInputJson["login"] != nullptr) {
                     this->myWallets->addUser(userInputJson["login"]);
                 }
@@ -72,6 +71,19 @@ public:
                     result["assets"] = assetsFromWallet;
                 }
                 res << result.dump();
+            });
+        multiplexer.handle("/wallets")
+            .post([this](served::response & res, const served::request & req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
+                nlohmann::json walletInputJson = nlohmann::json::parse(req.body());
+                std::cout<<req.body()<<std::endl;
+                if (walletInputJson["userLogin"] != nullptr &&
+                        walletInputJson["name"] != nullptr &&
+                        walletInputJson["description"] != nullptr) {
+                    this->myWallets->addWallet(walletInputJson["userLogin"],
+                                               walletInputJson["name"],
+                                               walletInputJson["description"]);
+                }
             });
         multiplexer.handle("/assets/{id:\\d+}")
             .get([this](served::response& res, const served::request& req) {
