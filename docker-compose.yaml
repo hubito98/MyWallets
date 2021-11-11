@@ -19,6 +19,7 @@ services:
     ports:
       - 8080:8080
     environment:
+      EXECUTE_TYPE: rest
       DB_NAME: ${MYWALLETS_DB_NAME:-mywallets-database}
       DB_HOST: mywallets-db
       DB_PORT: 3306

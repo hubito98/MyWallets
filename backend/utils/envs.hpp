@@ -13,7 +13,7 @@ struct DatabaseNameEnvVar {
 
 struct ExecuteTypeEnvVar {
     static constexpr const char* envName = "EXECUTE_TYPE";
-    static constexpr const char* defaultValue = "cli";
+    static constexpr const char* defaultValue = "rest";
 };
 
 struct DbHostEnvVar {
