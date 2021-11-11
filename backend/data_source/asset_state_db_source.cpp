@@ -2,24 +2,34 @@
 
 namespace my_wallets {
 
-const std::vector<AssetState> AssetStateDbSource::getAssetStates() const {
+const std::vector<AssetState> AssetStateDbSource::getDescendingAssetStates() const {
     std::vector<AssetState> assetStates;
-    auto assetStatesFromDb = database->getAssetStates();
-    std::transform(assetStatesFromDb.begin(), assetStatesFromDb.end(), std::back_inserter(assetStates), AssetStateDbSource::assetStateFromDbResult);
+    auto assetStatesFromDb = database->getOrderedAssetStates(Database::Order::DESC);
+    if (assetStatesFromDb != nullptr) {
+        while (assetStatesFromDb->next()) {
+            assetStates.push_back(assetStateFromDbResult(assetStatesFromDb.get()));
+        }
+    }
     return assetStates;
 }
 
-const std::vector<AssetState> AssetStateDbSource::getParticularAssetStates(const size_t assetId) const {
+const std::vector<AssetState> AssetStateDbSource::getParticularAssetDescendingStates(const size_t assetId) const {
     std::vector<AssetState> particularAssetStates;
-    auto assetStatesFromDb = database->getParticularAssetStates(assetId);
-    std::transform(assetStatesFromDb.begin(), assetStatesFromDb.end(), std::back_inserter(particularAssetStates), AssetStateDbSource::assetStateFromDbResult);
+    auto assetStatesFromDb = database->getParticularAssetOrderedStates(assetId, Database::Order::DESC);
+    if (assetStatesFromDb != nullptr) {
+        while (assetStatesFromDb->next()) {
+            particularAssetStates.push_back(assetStateFromDbResult(assetStatesFromDb.get()));
+        }
+    }
     return particularAssetStates;
 }
 
 std::optional<AssetState> AssetStateDbSource::getAssetState(const size_t id) const {
     const auto assetStateFromDb = database->getAssetState(id);
-    if (assetStateFromDb.isNull()) return {};
-    return this->assetStateFromDbResult(assetStateFromDb);
+    if (assetStateFromDb->next()) {
+        return assetStateFromDbResult(assetStateFromDb.get());
+    }
+    return {};
 }
 
 bool AssetStateDbSource::addAssetState(const size_t assetId, const Date& date, const double value,

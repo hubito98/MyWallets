@@ -5,21 +5,31 @@ namespace my_wallets {
 const std::vector<Wallet> WalletDbSource::getWallets() const {
     std::vector<Wallet> wallets;
     auto walletsFromDb = database->getWallets();
-    std::transform(walletsFromDb.begin(), walletsFromDb.end(), std::back_inserter(wallets), WalletDbSource::walletFromDbResult);
+    if (walletsFromDb != nullptr) {
+        while (walletsFromDb->next()) {
+            wallets.push_back(walletFromDbResult(walletsFromDb.get()));
+        }
+    }
     return wallets;
 }
 
 const std::vector<Wallet> WalletDbSource::getUserWallets(const std::string& userLogin) const {
     std::vector<Wallet> userWallets;
     auto walletsFromDb = database->getUserWallets(userLogin);
-    std::transform(walletsFromDb.begin(), walletsFromDb.end(), std::back_inserter(userWallets), WalletDbSource::walletFromDbResult);
+    if (walletsFromDb != nullptr) {
+        while (walletsFromDb->next()) {
+            userWallets.push_back(walletFromDbResult(walletsFromDb.get()));
+        }
+    }
     return userWallets;
 }
 
 std::optional<Wallet> WalletDbSource::getWallet(const size_t id) const {
     const auto walletFromDb = database->getWallet(id);
-    if (walletFromDb.isNull()) return {};
-    return this->walletFromDbResult(walletFromDb);
+    if (walletFromDb->next()) {
+        return walletFromDbResult(walletFromDb.get());
+    }
+    return {};
 }
 
 bool WalletDbSource::addWallet(const std::string& userLogin, const std::string& name,

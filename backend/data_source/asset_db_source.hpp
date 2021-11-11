@@ -3,7 +3,7 @@
 #include <vector>
 #include <optional>
 
-#include <mysqlx/xdevapi.h>
+#include <cppconn/resultset.h>
 
 #include "data_source/asset_source.hpp"
 #include "entity/asset.hpp"
@@ -22,9 +22,9 @@ public:
                   const std::string& description=0) override;
     bool removeAsset(const size_t id) override;
 private:
-    static Asset assetFromDbResults(mysqlx::Row userFromDb) {
-        return Asset((int)userFromDb[0], (int)userFromDb[3],
-                (std::string)userFromDb[1], (std::string)userFromDb[2]);
+    static Asset assetFromDbResults(sql::ResultSet* userFromDb) {
+        return Asset(userFromDb->getInt(1), userFromDb->getInt(4),
+                userFromDb->getString(2), userFromDb->getString(3));
     }
 
     std::shared_ptr<Database> database;

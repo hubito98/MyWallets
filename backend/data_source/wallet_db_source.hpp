@@ -3,7 +3,7 @@
 #include <vector>
 #include <optional>
 
-#include <mysqlx/xdevapi.h>
+#include <cppconn/resultset.h>
 
 #include "data_source/wallet_source.hpp"
 #include "data_source/database.hpp"
@@ -22,9 +22,9 @@ public:
                    const std::string& description="") override;
     bool removeWallet(const size_t id) override;
 private:
-    static Wallet walletFromDbResult(const mysqlx::Row& walletFromDb) {
-        return Wallet((int)walletFromDb[0], (std::string)walletFromDb[3],
-                      (std::string)walletFromDb[1], (std::string)walletFromDb[2]);
+    static Wallet walletFromDbResult(const sql::ResultSet* walletFromDb) {
+        return Wallet(walletFromDb->getInt(1), walletFromDb->getString(4),
+                      walletFromDb->getString(2), walletFromDb->getString(3));
     }
 
     std::shared_ptr<Database> database;

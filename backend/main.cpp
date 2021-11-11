@@ -20,12 +20,18 @@
 #include "rest/rest.hpp"
 
 using namespace my_wallets;
-
+using namespace utils;
 
 int main() {
+    const std::string host = getEnv(DbHostEnvVar::envName, DbHostEnvVar::defaultValue);
+    const std::string port = getEnv(DbPortEnvVar::envName, DbPortEnvVar::defaultValue);
+    const std::string user = getEnv(DbUserEnvVar::envName, DbUserEnvVar::defaultValue);
+    const std::string password = getEnv(DbPasswordEnvVar::envName, DbPasswordEnvVar::defaultValue);
+    const std::string databaseName = getEnv(DatabaseNameEnvVar::envName, DatabaseNameEnvVar::defaultValue);
+
     std::shared_ptr<Database> database = 
-            std::make_shared<Database>(utils::getEnv(utils::DatabaseNameEnvVar::envName, utils::DatabaseNameEnvVar::defaultValue));
-    const std::string executeType = utils::getEnv(utils::ExecuteTypeEnvVar::envName, utils::ExecuteTypeEnvVar::defaultValue);
+            std::make_shared<Database>(databaseName, host, port, user, password);
+    const std::string executeType = getEnv(ExecuteTypeEnvVar::envName, ExecuteTypeEnvVar::defaultValue);
     if (executeType == "cli") {
         cli::CLI cli(std::make_unique<frontend::MyWallets>(std::make_unique<UserDbSource>(database),
                                                         std::make_unique<WalletDbSource>(database),

@@ -84,7 +84,7 @@ bool MyWallets::removeAsset(const AssetModel& asset) {
 }
 
 const std::vector<AssetStateModel> MyWallets::getAssetStatesOfAsset(const AssetModel& assetModel) const {
-    const auto assetStateOfAssetData = assetStateSource->getParticularAssetStates(assetModel.getId());
+    const auto assetStateOfAssetData = assetStateSource->getParticularAssetDescendingStates(assetModel.getId());
     std::vector<AssetStateModel> assetStatesOfAsset;
     std::transform(assetStateOfAssetData.begin(), assetStateOfAssetData.end(), std::back_inserter(assetStatesOfAsset),
                    [](const auto& assetState){
@@ -104,7 +104,7 @@ bool MyWallets::removeAssetState(const AssetStateModel& assetState) {
 
 const model::BasicAssetStatisticModel MyWallets::getBasicAssetStatistics(const AssetModel& assetModel) const {
     const auto asset = assetSource->getAsset(assetModel.getId());
-    const auto assetStates = assetStateSource->getParticularAssetStates(assetModel.getId());
+    const auto assetStates = assetStateSource->getParticularAssetDescendingStates(assetModel.getId());
     return model::BasicAssetStatisticModel(asset.value(), assetStates);
 }
 
@@ -114,7 +114,7 @@ const model::BasicWalletStatisticsModel MyWallets::getBasicWalletStatistics(cons
     std::vector<model::BasicWalletStatisticsModel::AssetWithItsStates> assetsWithStates;
     std::transform(assets.begin(), assets.end(), std::back_inserter(assetsWithStates),
             [this](const Asset asset) {
-        return model::BasicWalletStatisticsModel::AssetWithItsStates(asset, assetStateSource->getParticularAssetStates(asset.getId()));
+        return model::BasicWalletStatisticsModel::AssetWithItsStates(asset, assetStateSource->getParticularAssetDescendingStates(asset.getId()));
     });
     return model::BasicWalletStatisticsModel(wallet.value(), assetsWithStates);
 }

@@ -5,14 +5,20 @@ namespace my_wallets {
 const std::vector<User> UserDbSource::getUsers() const {
     std::vector<User> users;
     auto usersFromDb = database->getUsers();
-    std::transform(usersFromDb.begin(), usersFromDb.end(), std::back_inserter(users), UserDbSource::userFromDbResult);
+    if (usersFromDb != nullptr) {
+        while (usersFromDb->next()) {
+            users.push_back(userFromDbResult(usersFromDb.get()));
+        }
+    }
     return users;
 }
 
 std::optional<User> UserDbSource::getUser(const std::string& login) const {
     const auto userFromDb = database->getUser(login);
-    if (userFromDb.isNull()) return {};
-    return UserDbSource::userFromDbResult(userFromDb);
+    if (userFromDb->next()) {
+        return userFromDbResult(userFromDb.get());
+    }
+    return {};
 }
 
 bool UserDbSource::addUser(const std::string& login) {

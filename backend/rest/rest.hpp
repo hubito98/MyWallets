@@ -15,7 +15,7 @@ namespace rest {
 class RESTServer {
 public:
     RESTServer(std::unique_ptr<frontend::MyWallets> myWallets)
-    : myWallets(std::move(myWallets)), server("localhost", "8080", multiplexer) {
+    : myWallets(std::move(myWallets)), server("0.0.0.0", "8080", multiplexer) {
         setupEndpoints();
     }
 

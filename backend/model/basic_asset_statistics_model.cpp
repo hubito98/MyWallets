@@ -23,7 +23,8 @@ void BasicAssetStatisticModel::calculateAssetStateStats(const std::vector<AssetS
     std::transform(newestIt, oldestIt-1, newestIt+1, std::back_inserter(this->assetStateStats),
             [](const AssetState& current, const AssetState& previous) {
         double growth = (current.getValue() - current.getIncome()) - previous.getValue();
-        double growthInPercent = growth / previous.getValue() * 100;
+        // if previous value is zero, then it not possible to calculate growthInPercent
+        double growthInPercent = previous.getValue() == 0 ? std::nan("") : growth / previous.getValue() * 100;
         int daysDifference = std::max(current.getDate() - previous.getDate(), 1);
         return SingleAssetStateStat{
             .date = current.getDate(),
@@ -35,13 +36,15 @@ void BasicAssetStatisticModel::calculateAssetStateStats(const std::vector<AssetS
     });
     // add oldest asset state to the end of stats
     const auto& oldestAssetState = assetStates.back();
-    double growth = oldestAssetState.getValue() - oldestAssetState.getIncome(); 
+    double growth = oldestAssetState.getValue() - oldestAssetState.getIncome();
+    // if current asset state value is zero, then it's impossible to calculate growthInPercent
+    double growthInPercent = oldestAssetState.getValue() == 0 ? std::nan("") : growth / oldestAssetState.getValue();
     this->assetStateStats.push_back(SingleAssetStateStat{
         .date = oldestAssetState.getDate(),
         .value = oldestAssetState.getValue(),
         .income = oldestAssetState.getIncome(),
         .growth = growth,
-        .growthInPercent = growth / oldestAssetState.getValue(),
+        .growthInPercent = growthInPercent,
         .growthInPercentScaledByYear = 0});
 }
 

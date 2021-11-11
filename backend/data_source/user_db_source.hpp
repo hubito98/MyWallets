@@ -3,7 +3,7 @@
 #include <vector>
 #include <optional>
 
-#include <mysqlx/xdevapi.h>
+#include <cppconn/resultset.h>
 
 #include "data_source/user_source.hpp"
 #include "entity/user.hpp"
@@ -20,8 +20,8 @@ public:
     bool addUser(const std::string& login) override;
     bool removeUser(const std::string& login) override;
 private:
-    static User userFromDbResult(const mysqlx::Row& userFromDb) {
-        return User((std::string)userFromDb[0]);
+    static User userFromDbResult(const sql::ResultSet* userFromDb) {
+        return User(userFromDb->getString(1));
     }
 
     std::shared_ptr<Database> database;
