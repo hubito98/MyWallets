@@ -25,7 +25,6 @@ services:
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: password
-    command: /app/main
 
 volumes:
   db_data:
