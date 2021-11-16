@@ -102,6 +102,14 @@ bool MyWallets::removeAssetState(const AssetStateModel& assetState) {
     return assetStateSource->removeAssetState(assetState.getId());
 }
 
+std::optional<AssetStateModel> MyWallets::getAssetState(const size_t id) const {
+    const auto assetStateFromSource = assetStateSource->getAssetState(id);
+    if (assetStateFromSource.has_value()) {
+        return AssetStateModel(assetStateFromSource.value());
+    }
+    return {};
+}
+
 const model::BasicAssetStatisticModel MyWallets::getBasicAssetStatistics(const AssetModel& assetModel) const {
     const auto asset = assetSource->getAsset(assetModel.getId());
     const auto assetStates = assetStateSource->getParticularAssetDescendingStates(assetModel.getId());

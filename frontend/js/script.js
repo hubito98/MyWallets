@@ -408,10 +408,26 @@ function addAssetStatesToTable(assetStates) {
                 .text(assetState.value);
         var incomeCell = $("<td></td>")
                 .text(assetState.income);
-        var actionsCell = $("<td></td>");
+        var removeButton = $("<button></button>")
+                .attr("type", "button")
+                .attr("class", "btn btn-danger btn-sm")
+                .attr("onclick", "removeAssetState(" + assetState.id + ")")
+                .text("X");
+        var actionsCell = $("<td></td>").append(removeButton);
         var tr = $("<tr></tr>").append(dateCell, valueCell, incomeCell, actionsCell);
         $("#menu table tbody").append(tr);
     });
+}
+
+function removeAssetState(id) {
+    if (confirm('You sure you want to remove it?')) {
+        $.ajax({
+            url: restAddress + "/asset-states/" + id,
+            type: 'POST'
+        }).then(function(data) {
+            loadAssetDetails(parseInt(getId()));
+        });
+    }
 }
 
 function prepareAssetStateForm() {

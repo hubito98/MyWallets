@@ -49,6 +49,7 @@ public:
     bool addAssetState(const size_t assetId, const Date& date, const double value,
                        const double income);
     bool removeAssetState(const AssetStateModel& assetState);
+    std::optional<AssetStateModel> getAssetState(const size_t id) const;
     
     // asset states statistics    
     const model::BasicAssetStatisticModel getBasicAssetStatistics(const AssetModel& assetModel) const;

@@ -114,6 +114,16 @@ public:
                                               assetInputJson["description"]);
                 }
             });
+        multiplexer.handle("/asset-states/{id:\\d+}")
+            // using post instead of del (http DELETE) due to del not working
+            .post([this](served::response& res, const served::request& req) {
+                res.set_header("Access-Control-Allow-Origin", "*");
+                const auto assetStateId = std::stoi(req.params["id"]);
+                const auto assetState = this->myWallets->getAssetState(assetStateId);
+                if (assetState.has_value()) {
+                    this->myWallets->removeAssetState(assetState.value());
+                }
+            });
         multiplexer.handle("/asset-states")
             .post([this](served::response & res, const served::request & req) {
                 res.set_header("Access-Control-Allow-Origin", "*");
