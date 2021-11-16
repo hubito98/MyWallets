@@ -200,7 +200,7 @@ function addWalletStatsOverallInfo(walletName, wholeWalletValue) {
     var header = $("<h4></h4>")
             .text(walletName);
     var walletInfo = $("<p></p>")
-            .text("Wallet value: " + wholeWalletValue);
+            .text("Wallet value: " + currencyFormat(wholeWalletValue));
     $("#content").append(header, walletInfo);
 }
 
@@ -211,7 +211,8 @@ function addWalletChart(assetStats) {
 
     for (var i = 0; i < assetStats.length; i++) {
         let assetStat = assetStats[i];
-        assetTypes.push(assetStat.type + "(" + assetStat.percentageOfTotal + "%)");
+        assetTypes.push(assetStat.type + " - " + currencyFormat(assetStat.currentValue) +
+                " (" + percentFormat(assetStat.percentageOfTotal) +")");
         assetValues.push(assetStat.currentValue);
         colors.push(chooseColor(i));
     }
@@ -229,7 +230,16 @@ function addWalletChart(assetStats) {
           }]
         },
         options: {
-          responsive: true
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label;
+                        }
+                    }
+                }
+            },
+            responsive: true
         }
       });
 }
@@ -359,9 +369,9 @@ function addAssetStatsOverallInfo(assetType, newestAssetValue, sumOfIncomes) {
     var header = $("<h4></h4>")
             .text(assetType);
     var assetValue = $("<p></p>")
-            .text("Asset value: " + newestAssetValue);
+            .text("Asset value: " + currencyFormat(newestAssetValue));
     var assetIncomes = $("<p></p>")
-            .text("Sum of incomes: " + sumOfIncomes);
+            .text("Sum of incomes: " + currencyFormat(sumOfIncomes));
     $("#content").append(header, assetValue, assetIncomes);
 }
 
@@ -407,9 +417,9 @@ function addAssetStatesToTable(assetStates) {
         var dateCell = $("<td></td>")
                 .text(assetState.date.day + "-" + assetState.date.month + "-" + assetState.date.year);
         var valueCell = $("<td></td>")
-                .text(assetState.value);
+                .text(currencyFormat(assetState.value));
         var incomeCell = $("<td></td>")
-                .text(assetState.income);
+                .text(currencyFormat(assetState.income));
         var removeButton = $("<button></button>")
                 .attr("type", "button")
                 .attr("class", "btn btn-danger btn-sm")
@@ -549,4 +559,12 @@ function getId() {
 
 function chooseColor(i) {
     return colorsPalette[i % colorsPalette.length];
+}
+
+function currencyFormat(amount) {
+    return Number(amount).toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' })
+}
+
+function percentFormat(percent) {
+    return Number(percent/100).toLocaleString('pl-PL', {style: 'percent', maximumFractionDigits: 2})
 }
