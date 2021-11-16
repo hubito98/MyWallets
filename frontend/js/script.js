@@ -1,4 +1,5 @@
-let restAddress = "http://localhost:8080"
+let restAddress = "http://localhost:8080";
+let colorsPalette = ['#00429d', '#cf3759', '#73a2c6', '#ffbcaf', '#a5d5d8', '#f4777f', '#4771b2', '#93003a'];
 
 $(document).ready(function(){
     loadUsersMenu();
@@ -208,11 +209,12 @@ function addWalletChart(assetStats) {
     var assetValues = [];
     var colors = [];
 
-    assetStats.forEach(function (assetStat) {
+    for (var i = 0; i < assetStats.length; i++) {
+        let assetStat = assetStats[i];
         assetTypes.push(assetStat.type + "(" + assetStat.percentageOfTotal + "%)");
         assetValues.push(assetStat.currentValue);
-        colors.push('#'+Math.floor(Math.random()*16777215).toString(16));
-    });
+        colors.push(chooseColor(i));
+    }
 
     var canvas = $("<div style=\"width: 70%; margin-left: auto; margin-right: auto;\"><canvas id=\"asset-stats-pie-chart\"></canvas></div>");
     $("#content").append(canvas);
@@ -543,4 +545,8 @@ function setId(id) {
 
 function getId() {
     return $("#id").text();
+}
+
+function chooseColor(i) {
+    return colorsPalette[i % colorsPalette.length];
 }
