@@ -25,6 +25,9 @@ services:
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: password
+    depends_on:
+      - db
+    command: ["wait-for-it", "mywallets-db:3306", "--", "./main"]
 
 volumes:
   db_data:
