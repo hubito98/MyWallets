@@ -362,6 +362,7 @@ function loadAssetStatistics(assetId) {
                                  statsJSON.basicAssetStatistics.newestAssetValue,
                                  statsJSON.basicAssetStatistics.sumOfIncomes);
         addAssetChart(statsJSON.basicAssetStatistics.assetStateStats);
+        addAssetStatesStatsTable(statsJSON.basicAssetStatistics.assetStateStats);
     });
 }
 
@@ -372,11 +373,117 @@ function addAssetStatsOverallInfo(assetType, newestAssetValue, sumOfIncomes) {
             .text("Asset value: " + currencyFormat(newestAssetValue));
     var assetIncomes = $("<p></p>")
             .text("Sum of incomes: " + currencyFormat(sumOfIncomes));
-    $("#content").append(header, assetValue, assetIncomes);
+    let growth = newestAssetValue - sumOfIncomes;
+    let isGrowthNegative = growth < 0;
+    var assetGrowth = $("<p></p>")
+            .attr("class", `text-${isGrowthNegative ? "danger" : "success"}`)
+            .text(`Growth: ${currencyFormat(growth)}
+                  (${newestAssetValue != 0 ? percentFormat(growth / newestAssetValue * 100) : percentFormat(0)})`)
+    $("#content").append(header, assetValue, assetIncomes, assetGrowth);
 }
 
-function addAssetChart(assetStateStats) {
-    $("#content").append(JSON.stringify(assetStateStats));
+function addAssetChart(assetStatesStats) {
+    var growths = [];
+    var values = [];
+    var incomes = [];
+    var valuesWithoutIncome = [];
+    var labels = [];
+    assetStatesStats.slice().reverse().forEach(function(assetStateStat) {
+        const growth = assetStateStat['growth'];
+        const income = assetStateStat['income'];
+        const value = assetStateStat['value'];
+        const date = assetStateStat['date'];
+        growths.push(growth);
+        values.push(value);
+        incomes.push(income);
+        valuesWithoutIncome.push(value - income);
+        labels.push(`${date['day']}-${date['month']}-${date['year']}`);
+    });
+
+    var canvas = $("<div style=\"width: 100%; margin-left: auto; margin-right: auto;\"><canvas id=\"asset-states-stats-stacked-chart\"></canvas></div>");
+    $("#content").append(canvas);
+    var ctxP = document.getElementById("asset-states-stats-stacked-chart").getContext("2d");
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'growth',
+                data: growths,
+                backgroundColor: chooseColor(0),
+            },
+            {
+                label: 'value without income',
+                data: valuesWithoutIncome,
+                backgroundColor: chooseColor(3),
+            },
+            {
+                label: 'income',
+                data: incomes,
+                backgroundColor: chooseColor(1),
+            },
+            {
+                label: 'value',
+                data: values,
+                backgroundColor: chooseColor(2),
+            },
+            ]
+    };
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return currencyFormat(context.raw);
+                        },
+                        title: function(context) {
+                            return context[0].dataset.label;
+                        }
+                    }
+                }
+            },
+            responsive: true,
+        }
+      };
+    new Chart(ctxP, config);
+}
+
+function addAssetStatesStatsTable(assetStatesStats) {
+    prepareTableForAssetStatesStats();
+    addAssetStatesStatsToTable(assetStatesStats);
+}
+
+function prepareTableForAssetStatesStats() {
+    var table = $("<table></table>")
+            .attr("class", "table");
+    var thead = $("<thead></thead>");
+    var tbody = $("<tbody></tbody>");
+    table.append(thead, tbody);
+    $("#content").append(table);
+    var headRow = $("<tr><th scope=\"col\">Date</th><th scope=\"col\">Value</th><th scope=\"col\">Income</th><th scope=\"col\">Growth</th><th scope=\"col\">Growth By Year</th></tr>")
+    $("#content table thead").append(headRow);
+}
+
+function addAssetStatesStatsToTable(assetStatesStats) {
+    assetStatesStats.forEach(function (assetStateStat) {
+        var dateCell = $("<td></td>")
+                .text(assetStateStat.date.day + "-" + assetStateStat.date.month + "-" + assetStateStat.date.year);
+        var valueCell = $("<td></td>")
+                .text(currencyFormat(assetStateStat.value));
+        var incomeCell = $("<td></td>")
+                .text(currencyFormat(assetStateStat.income));
+        var growthCell = $("<td></td>")
+                .text(`${currencyFormat(assetStateStat.growth)} (${percentFormat(assetStateStat.growthInPercent)})`);
+        var growthByYearCell = $("<td></td>")
+                .text(percentFormat(assetStateStat.growthInPercentScaledByYear));
+        let isGrowthNegative = assetStateStat.growth < 0;
+        var tr = $("<tr></tr>")
+                .attr("class", `table-${isGrowthNegative ? "danger" : "success"}`)
+                .append(dateCell, valueCell, incomeCell, growthCell, growthByYearCell);
+        $("#content table tbody").append(tr);
+    });
 }
 
 // asset details
