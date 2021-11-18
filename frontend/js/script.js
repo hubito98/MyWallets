@@ -386,18 +386,13 @@ function addAssetChart(assetStatesStats) {
     var growths = [];
     var values = [];
     var incomes = [];
-    var valuesWithoutIncome = [];
     var labels = [];
     assetStatesStats.slice().reverse().forEach(function(assetStateStat) {
-        const growth = assetStateStat['growth'];
-        const income = assetStateStat['income'];
-        const value = assetStateStat['value'];
-        const date = assetStateStat['date'];
-        growths.push(growth);
-        values.push(value);
-        incomes.push(income);
-        valuesWithoutIncome.push(value - income);
-        labels.push(`${date['day']}-${date['month']}-${date['year']}`);
+        growths.push(assetStateStat.growth);
+        values.push(assetStateStat.value);
+        incomes.push(assetStateStat.income);
+        const date = assetStateStat.date;
+        labels.push(`${date.day}-${date.month}-${date.year}`);
     });
 
     var canvas = $("<div style=\"width: 100%; margin-left: auto; margin-right: auto;\"><canvas id=\"asset-states-stats-stacked-chart\"></canvas></div>");
@@ -407,24 +402,22 @@ function addAssetChart(assetStatesStats) {
         labels: labels,
         datasets: [
             {
-                label: 'growth',
-                data: growths,
+                label: 'value',
+                data: values,
                 backgroundColor: chooseColor(0),
-            },
-            {
-                label: 'value without income',
-                data: valuesWithoutIncome,
-                backgroundColor: chooseColor(3),
+                hidden: false
             },
             {
                 label: 'income',
                 data: incomes,
                 backgroundColor: chooseColor(1),
+                hidden: true
             },
             {
-                label: 'value',
-                data: values,
+                label: 'growth',
+                data: growths,
                 backgroundColor: chooseColor(2),
+                hidden: true
             },
             ]
     };
