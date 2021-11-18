@@ -28,6 +28,12 @@ services:
     depends_on:
       - db
     command: ["wait-for-it", "mywallets-db:3306", "--", "./main"]
+  frontend:
+    container_name: mywallets-frontend
+    restart: always
+    build: frontend/.
+    ports:
+      - 3000:3000
 
 volumes:
   db_data:
