@@ -1,5 +1,5 @@
 let restAddress = "http://localhost:8080";
-let colorsPalette = ['#00429d', '#cf3759', '#73a2c6', '#ffbcaf', '#a5d5d8', '#f4777f', '#4771b2', '#93003a'];
+let colorsPalette = ["#fd7f6f", "#7eb0d5", "#b2e061", "#bd7ebe", "#ffb55a", "#ffee65", "#beb9db", "#fdcce5", "#8bd3c7"];
 
 $(document).ready(function(){
     loadUsersMenu();
@@ -384,6 +384,8 @@ function addAssetStatsOverallInfo(assetType, newestAssetValue, sumOfIncomes) {
 
 function addAssetChart(assetStatesStats) {
     var growths = [];
+    var growthsInPercent = [];
+    var growthsInPercentScaledByYear = [];
     var values = [];
     var incomes = [];
     var labels = [];
@@ -391,8 +393,10 @@ function addAssetChart(assetStatesStats) {
         growths.push(assetStateStat.growth);
         values.push(assetStateStat.value);
         incomes.push(assetStateStat.income);
+        growthsInPercent.push(assetStateStat.growthInPercent);
+        growthsInPercentScaledByYear.push(assetStateStat.growthInPercentScaledByYear);
         const date = assetStateStat.date;
-        labels.push(`${date.day}-${date.month}-${date.year}`);
+        labels.push(dateFormat(date.day, date.month, date.year));
     });
 
     var canvas = $("<div style=\"width: 100%; margin-left: auto; margin-right: auto;\"><canvas id=\"asset-states-stats-stacked-chart\"></canvas></div>");
@@ -419,6 +423,18 @@ function addAssetChart(assetStatesStats) {
                 backgroundColor: chooseColor(2),
                 hidden: true
             },
+            {
+                label: '% growth',
+                data: growthsInPercent,
+                backgroundColor: chooseColor(3),
+                hidden: true
+            },
+            {
+                label: '% growth by year',
+                data: growthsInPercentScaledByYear,
+                backgroundColor: chooseColor(4),
+                hidden: true
+            },
             ]
     };
     const config = {
@@ -429,7 +445,13 @@ function addAssetChart(assetStatesStats) {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return currencyFormat(context.raw);
+                            let rawValue = context.raw;
+                            // values in percent ("growth in percent" or "growth in percent scaled by year")
+                            if (context.datasetIndex == 3 || context.datasetIndex == 4) {
+                                return percentFormat(rawValue);
+                            } else {
+                                return currencyFormat(rawValue);
+                            }
                         },
                         title: function(context) {
                             return context[0].dataset.label;
@@ -462,7 +484,7 @@ function prepareTableForAssetStatesStats() {
 function addAssetStatesStatsToTable(assetStatesStats) {
     assetStatesStats.forEach(function (assetStateStat) {
         var dateCell = $("<td></td>")
-                .text(assetStateStat.date.day + "-" + assetStateStat.date.month + "-" + assetStateStat.date.year);
+                .text(dateFormat(assetStateStat.date.day, assetStateStat.date.month, assetStateStat.date.year));
         var valueCell = $("<td></td>")
                 .text(currencyFormat(assetStateStat.value));
         var incomeCell = $("<td></td>")
@@ -515,7 +537,7 @@ function prepareTableForAssetStates() {
 function addAssetStatesToTable(assetStates) {
     assetStates.forEach(function (assetState) {
         var dateCell = $("<td></td>")
-                .text(assetState.date.day + "-" + assetState.date.month + "-" + assetState.date.year);
+                .text(dateFormat(assetState.date.day, assetState.date.month, assetState.date.year));
         var valueCell = $("<td></td>")
                 .text(currencyFormat(assetState.value));
         var incomeCell = $("<td></td>")
@@ -667,4 +689,8 @@ function currencyFormat(amount) {
 
 function percentFormat(percent) {
     return Number(percent/100).toLocaleString('pl-PL', {style: 'percent', maximumFractionDigits: 2})
+}
+
+function dateFormat(day, month, year) {
+    return `${day}/${month}/${year}`;
 }
