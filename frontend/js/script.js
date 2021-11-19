@@ -22,7 +22,7 @@ function loadUsersMenu() {
 
 function prepareTableForUsers() {
     prepareTable();
-    var headRow = $("<tr><th scope=\"col\">User</th><th scope=\"col\">Actions</th></tr>")
+    var headRow = $("<tr><th scope=\"col\">Login</th><th scope=\"col\"></th></tr>")
     $("#menu table thead").append(headRow);
 }
 
@@ -37,7 +37,7 @@ function addUserTableRow(user) {
             .attr("type", "button")
             .attr("class", "btn btn-light btn-sm")
             .attr("onclick", "loadUserDetails(\"" + user.login + "\")")
-            .text("Details");
+            .text("Szczegóły");
     var actionsCell = $("<td></td>").append(detailsButton);
     var tr = $("<tr></tr>").append(loginCell, actionsCell);
     $("#menu table tbody").append(tr);
@@ -60,7 +60,7 @@ function prepareUserForm() {
             .attr("class", "btn btn-primary")
             .attr("type", "button")
             .attr("onclick", "addUser()")
-            .text("Add user");
+            .text("Dodaj użytkownika");
     $("#form form").append(loginDiv, submitButton);
 }
 
@@ -106,7 +106,7 @@ function addUserInfo(user) {
 
 function prepareTableForWallets() {
     prepareTable();
-    var headRow = $("<tr><th scope=\"col\">Name</th><th scope=\"col\">Description</th><th scope=\"col\">Actions</th></tr>")
+    var headRow = $("<tr><th scope=\"col\">Nazwa</th><th scope=\"col\">Opis</th><th scope=\"col\"></th></tr>")
     $("#menu table thead").append(headRow);
 }
 
@@ -120,12 +120,12 @@ function addWalletsToTable(wallets) {
                 .attr("type", "button")
                 .attr("class", "btn btn-light btn-sm")
                 .attr("onclick", "loadWalletStatistics(" + wallet.id + ")")
-                .text("Statistics");
+                .text("Stats");
         var detailsButton = $("<button></button>")
                 .attr("type", "button")
                 .attr("class", "btn btn-light btn-sm")
                 .attr("onclick", "loadWalletDetails(" + wallet.id + ")")
-                .text("Details");
+                .text("Szczegóły");
         var actionsCell = $("<td></td>").append(statsButton, detailsButton);
         var tr = $("<tr></tr>").append(nameCell, descriptionCell, actionsCell);
         $("#menu table tbody").append(tr);
@@ -135,7 +135,7 @@ function addWalletsToTable(wallets) {
 function prepareWalletForm() {
     prepareForm();
     var nameLabel = $("<label></label>")
-            .text("Wallet name:")
+            .text("Nazwa portfela:")
             .attr("for", "wallet-name")
             .attr("class", "form-label");
     var nameInput = $("<input>")
@@ -146,7 +146,7 @@ function prepareWalletForm() {
             .attr("class", "mb-3")
             .append(nameLabel, nameInput);
     var descriptionLabel = $("<label></label>")
-            .text("Wallet description:")
+            .text("Opis portfela:")
             .attr("for", "wallet-description")
             .attr("class", "form-label");
     var descriptionInput = $("<input>")
@@ -160,7 +160,7 @@ function prepareWalletForm() {
             .attr("class", "btn btn-primary")
             .attr("type", "button")
             .attr("onclick", "addWallet()")
-            .text("Add wallet");
+            .text("Dodaj portfel");
     $("#form form").append(nameDiv, descriptionDiv, submitButton);
 }
 
@@ -200,7 +200,7 @@ function addWalletStatsOverallInfo(walletName, wholeWalletValue) {
     var header = $("<h4></h4>")
             .text(walletName);
     var walletInfo = $("<p></p>")
-            .text("Wallet value: " + currencyFormat(wholeWalletValue));
+            .text("Wartość portfela: " + currencyFormat(wholeWalletValue));
     $("#content").append(header, walletInfo);
 }
 
@@ -273,7 +273,7 @@ function addWalletInfo(wallet) {
 
 function prepareTableForAssets() {
     prepareTable();
-    var headRow = $("<tr><th scope=\"col\">Type</th><th scope=\"col\">Description</th><th scope=\"col\">Actions</th></tr>")
+    var headRow = $("<tr><th scope=\"col\">Typ</th><th scope=\"col\">Opis</th><th scope=\"col\"></th></tr>")
     $("#menu table thead").append(headRow);
 }
 
@@ -287,12 +287,12 @@ function addAssetsToTable(assets) {
                 .attr("type", "button")
                 .attr("class", "btn btn-light btn-sm")
                 .attr("onclick", "loadAssetStatistics(" + asset.id + ")")
-                .text("Statistics");
+                .text("Stats");
         var detailsButton = $("<button></button>")
                 .attr("type", "button")
                 .attr("class", "btn btn-light btn-sm")
                 .attr("onclick", "loadAssetDetails(" + asset.id + ")")
-                .text("Details");
+                .text("Szczegóły");
         var actionsCell = $("<td></td>").append(statsButton, detailsButton);
         var tr = $("<tr></tr>").append(typeCell, descriptionCell, actionsCell);
         $("#menu table tbody").append(tr);
@@ -302,7 +302,7 @@ function addAssetsToTable(assets) {
 function prepareAssetForm() {
     prepareForm();
     var typeLabel = $("<label></label>")
-            .text("Asset type:")
+            .text("Typ aktywa:")
             .attr("for", "asset-type")
             .attr("class", "form-label");
     var typeInput = $("<input>")
@@ -313,7 +313,7 @@ function prepareAssetForm() {
             .attr("class", "mb-3")
             .append(typeLabel, typeInput);
     var descriptionLabel = $("<label></label>")
-            .text("Asset description:")
+            .text("Opis aktywa:")
             .attr("for", "asset-description")
             .attr("class", "form-label");
     var descriptionInput = $("<input>")
@@ -327,7 +327,7 @@ function prepareAssetForm() {
             .attr("class", "btn btn-primary")
             .attr("type", "button")
             .attr("onclick", "addAsset()")
-            .text("Add asset");
+            .text("Dodaj aktywo");
     $("#form form").append(typeDiv, descriptionDiv, submitButton);
 }
 
@@ -370,14 +370,14 @@ function addAssetStatsOverallInfo(assetType, newestAssetValue, sumOfIncomes) {
     var header = $("<h4></h4>")
             .text(assetType);
     var assetValue = $("<p></p>")
-            .text("Asset value: " + currencyFormat(newestAssetValue));
+            .text("Wartość aktywa: " + currencyFormat(newestAssetValue));
     var assetIncomes = $("<p></p>")
-            .text("Sum of incomes: " + currencyFormat(sumOfIncomes));
+            .text("Suma wpłat: " + currencyFormat(sumOfIncomes));
     let growth = newestAssetValue - sumOfIncomes;
     let isGrowthNegative = growth < 0;
     var assetGrowth = $("<p></p>")
             .attr("class", `text-${isGrowthNegative ? "danger" : "success"}`)
-            .text(`Growth: ${currencyFormat(growth)}
+            .text(`Zysk: ${currencyFormat(growth)}
                   (${newestAssetValue != 0 ? percentFormat(growth / newestAssetValue * 100) : percentFormat(0)})`)
     $("#content").append(header, assetValue, assetIncomes, assetGrowth);
 }
@@ -406,31 +406,31 @@ function addAssetChart(assetStatesStats) {
         labels: labels,
         datasets: [
             {
-                label: 'value',
+                label: 'wartość',
                 data: values,
                 backgroundColor: chooseColor(0),
                 hidden: false
             },
             {
-                label: 'income',
+                label: 'wpłata',
                 data: incomes,
                 backgroundColor: chooseColor(1),
                 hidden: true
             },
             {
-                label: 'growth',
+                label: 'zysk',
                 data: growths,
                 backgroundColor: chooseColor(2),
                 hidden: true
             },
             {
-                label: '% growth',
+                label: '% zysk',
                 data: growthsInPercent,
                 backgroundColor: chooseColor(3),
                 hidden: true
             },
             {
-                label: '% growth by year',
+                label: '% zysk roczny',
                 data: growthsInPercentScaledByYear,
                 backgroundColor: chooseColor(4),
                 hidden: true
@@ -477,7 +477,7 @@ function prepareTableForAssetStatesStats() {
     var tbody = $("<tbody></tbody>");
     table.append(thead, tbody);
     $("#content").append(table);
-    var headRow = $("<tr><th scope=\"col\">Date</th><th scope=\"col\">Value</th><th scope=\"col\">Income</th><th scope=\"col\">Growth</th><th scope=\"col\">Growth By Year</th></tr>")
+    var headRow = $("<tr><th scope=\"col\">Data</th><th scope=\"col\">Wartość</th><th scope=\"col\">Wpłata</th><th scope=\"col\">Zysk</th><th scope=\"col\">Zysk roczny</th></tr>")
     $("#content table thead").append(headRow);
 }
 
@@ -530,7 +530,7 @@ function addAssetInfo(asset) {
 
 function prepareTableForAssetStates() {
     prepareTable();
-    var headRow = $("<tr><th scope=\"col\">Date</th><th scope=\"col\">Value</th><th scope=\"col\">Income</th><th scope=\"col\">Actions</th></tr>")
+    var headRow = $("<tr><th scope=\"col\">Data</th><th scope=\"col\">Wartość</th><th scope=\"col\">Wpłata</th><th scope=\"col\"></th></tr>")
     $("#menu table thead").append(headRow);
 }
 
@@ -554,7 +554,7 @@ function addAssetStatesToTable(assetStates) {
 }
 
 function removeAssetState(id) {
-    if (confirm('You sure you want to remove it?')) {
+    if (confirm('Na pewno chcesz to usunąć?')) {
         $.ajax({
             url: restAddress + "/asset-states/" + id,
             type: 'POST'
@@ -567,7 +567,7 @@ function removeAssetState(id) {
 function prepareAssetStateForm() {
     prepareForm();
     var dateLabel = $("<label></label>")
-            .text("Asset state date:")
+            .text("Data stanu:")
             .attr("for", "asset-state-date")
             .attr("class", "form-label");
     var dateInput = $("<input>")
@@ -577,8 +577,8 @@ function prepareAssetStateForm() {
     var dateDiv = $("<div></div>")
             .attr("class", "mb-3")
             .append(dateLabel, dateInput);
-            var valueLabel = $("<label></label>")
-            .text("Asset state value:")
+    var valueLabel = $("<label></label>")
+            .text("Wartość aktywa po wpłacie:")
             .attr("for", "asset-state-value")
             .attr("class", "form-label");
     var valueInput = $("<input>")
@@ -589,7 +589,7 @@ function prepareAssetStateForm() {
             .attr("class", "mb-3")
             .append(valueLabel, valueInput);
     var incomeLabel = $("<label></label>")
-            .text("Asset state income:")
+            .text("Wpłata:")
             .attr("for", "asset-state-income")
             .attr("class", "form-label");
     var incomeInput = $("<input>")
@@ -603,8 +603,8 @@ function prepareAssetStateForm() {
             .attr("class", "btn btn-primary")
             .attr("type", "button")
             .attr("onclick", "addAssetState()")
-            .text("Add asset state");
-    $("#form form").append(dateDiv, valueDiv, incomeDiv, submitButton);
+            .text("Dodaj stan aktywa");
+    $("#form form").append(dateDiv, incomeDiv, valueDiv, submitButton);
 }
 
 // add asset state
