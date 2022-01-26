@@ -11,7 +11,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: ${MYWALLETS_DB_NAME:-mywallets-database}
     volumes:
-      - test_db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
   backend:
     container_name: mywallets-backend
     restart: always
@@ -53,4 +53,4 @@ services:
       - 3000:3000
 
 volumes:
-  test_db_data:
+  db_data:

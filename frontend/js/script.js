@@ -1,4 +1,5 @@
 let restAddress = "http://localhost:8080";
+let walletTimelineServiceAddress = "http://localhost:8081";
 let colorsPalette = ["#fd7f6f", "#7eb0d5", "#b2e061", "#bd7ebe", "#ffb55a", "#ffee65", "#beb9db", "#fdcce5", "#8bd3c7"];
 
 $(document).ready(function(){
@@ -185,26 +186,35 @@ function addWallet() {
 // wallet statistics
 
 function loadWalletStatistics(walletId) {
+    clearContent();
+    addTwoDivsToContent("wallet-statistics", "wallet-timeline");
     $.ajax({
         url: restAddress + "/wallet-statistics/" + walletId,
         type: 'GET',
         datatype: 'json'
     }).then(function(statsJSON) {
-        clearContent();
-        addWalletStatsOverallInfo(statsJSON.basicWalletStatistics.walletName, statsJSON.basicWalletStatistics.wholeWalletValue);
-        addWalletChart(statsJSON.basicWalletStatistics.assetStats);
+        addWalletStatsOverallInfo(statsJSON.basicWalletStatistics.walletName,
+            statsJSON.basicWalletStatistics.wholeWalletValue, "wallet-statistics");
+        addWalletChart(statsJSON.basicWalletStatistics.assetStats, "wallet-statistics");
     });
+    $.ajax({
+        url: walletTimelineServiceAddress + "/wallet-timeline/" + walletId,
+        type: 'GET',
+        datatype: 'json'
+    }).then(function (walletTimelineJSON) {
+        addWalletTimeline(walletTimelineJSON.walletStats, "wallet-timeline")
+    })
 }
 
-function addWalletStatsOverallInfo(walletName, wholeWalletValue) {
+function addWalletStatsOverallInfo(walletName, wholeWalletValue, divName) {
     var header = $("<h4></h4>")
             .text(walletName);
     var walletInfo = $("<p></p>")
             .text("Wartość portfela: " + currencyFormat(wholeWalletValue));
-    $("#content").append(header, walletInfo);
+    $(`#content #${divName}`).append(header, walletInfo);
 }
 
-function addWalletChart(assetStats) {
+function addWalletChart(assetStats, divName) {
     var assetTypes = [];
     var assetValues = [];
     var colors = [];
@@ -217,8 +227,8 @@ function addWalletChart(assetStats) {
         colors.push(chooseColor(i));
     }
 
-    var canvas = $("<div style=\"width: 70%; margin-left: auto; margin-right: auto;\"><canvas id=\"asset-stats-pie-chart\"></canvas></div>");
-    $("#content").append(canvas);
+    var canvas = $("<div style=\"width: 70%; margin-left: auto; margin-right: auto; margin-bottom: 20px;\"><canvas id=\"asset-stats-pie-chart\"></canvas></div>");
+    $(`#content #${divName}`).append(canvas);
     var ctxP = document.getElementById("asset-stats-pie-chart").getContext("2d");
     new Chart(ctxP, {
         type: 'pie',
@@ -231,6 +241,10 @@ function addWalletChart(assetStats) {
         },
         options: {
             plugins: {
+                title: {
+                    display: true,
+                    text: "Aktualny stan portfela"
+                },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -242,6 +256,63 @@ function addWalletChart(assetStats) {
             responsive: true
         }
       });
+}
+
+function addWalletTimeline(walletTimeline, divName) {
+    var timestamps = [];
+    var assetValues = [];
+
+    walletTimeline.forEach((walletStat, i) => {
+        timestamps.push(walletStat.date);
+        var assetValue = 0;
+        for (let assetName in walletStat.assetsAndValues) {
+            assetValue += walletStat.assetsAndValues[assetName];
+        }
+        assetValues.push(assetValue);
+    });
+
+    var canvas = $("<div style=\"width: 100%; margin-left: auto; margin-right: auto;\"><canvas id=\"wallet-timeline-chart\"></canvas></div>");
+    $(`#content #${divName}`).append(canvas);
+    var ctxP = document.getElementById("wallet-timeline-chart").getContext("2d");
+    new Chart(ctxP, {
+        type: 'line',
+        data: {
+            labels: timestamps,
+            datasets: [{
+                label: "wartość portfela",
+                data: assetValues,
+                fill: true,
+                backgroundColor: chooseColor(8),
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Stan portfela w czasie"
+                },
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return currencyFormat(context.raw);
+                        }
+                    }
+                }
+            },
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+    });
 }
 
 // wallet details
@@ -650,6 +721,14 @@ function clearMenu() {
 
 function clearContent() {
     $("#content").empty();
+}
+
+function addTwoDivsToContent(name1, name2) {
+    var div1 = $("<div></div>")
+        .attr("id", name1);
+    var div2 = $("<div></div>")
+        .attr("id", name2);
+    $("#content").append(div1, div2);
 }
 
 function clearForm() {
