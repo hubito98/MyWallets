@@ -3,6 +3,7 @@ package com.hubert.wallettimeline.controller;
 import com.hubert.wallettimeline.entity.Wallet;
 import com.hubert.wallettimeline.model.WalletTimeline;
 import com.hubert.wallettimeline.service.WalletTimelineService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +26,13 @@ public class WalletTimelineController {
     @GetMapping(path = "{walletId}")
     public ResponseEntity<WalletTimeline> walletTimeline(@PathVariable int walletId) {
          Optional<WalletTimeline> walletTimeline = walletTimelineService.getWalletTimeline(walletId);
+         HttpHeaders responseHeaders = new HttpHeaders();
+         responseHeaders.set("Access-Control-Allow-Origin", "*");
          if (walletTimeline.isPresent()) {
-             return ResponseEntity.ok(walletTimeline.get());
+             return ResponseEntity.ok()
+                     .headers(responseHeaders)
+                     .body(walletTimeline.get());
          }
-         return ResponseEntity.notFound().build();
+         return ResponseEntity.notFound().headers(responseHeaders).build();
     }
 }
