@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class WalletTimeline {
     public static class WalletStat {
-        private LocalDate date;
-        private Map<String, Double> assetsAndValues;
+        private final LocalDate date;
+        private final Map<String, Double> assetsAndValues;
 
         public WalletStat(LocalDate date, Map<String, Double> assetValues) {
             this.date = date;
@@ -24,7 +24,7 @@ public class WalletTimeline {
         }
     }
 
-    private List<WalletStat> walletStats;
+    private final List<WalletStat> walletStats;
 
     public WalletTimeline(List<WalletStat> walletStats) {
         this.walletStats = walletStats;

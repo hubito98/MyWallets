@@ -44,7 +44,7 @@ services:
     depends_on:
       - db
     command: ["wait-for-it", "mywallets-db:3306", "--",
-              "/usr/bin/java", "-jar" , "target/wallettimeline-0.0.1-SNAPSHOT.jar"]
+              "/usr/bin/java", "-jar" , "target/wallettimeline-1.0.0.jar"]
   frontend:
     container_name: mywallets-frontend
     restart: always

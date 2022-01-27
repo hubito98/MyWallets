@@ -9,4 +9,4 @@ COPY . /app
 WORKDIR /app
 RUN ./mvnw compile
 RUN ./mvnw package -Dmaven.test.skip
-CMD ["/usr/bin/java", "-jar" , "target/wallettimeline-0.0.1-SNAPSHOT.jar"]
+CMD ["/usr/bin/java", "-jar" , "target/wallettimeline-1.0.0.jar"]
