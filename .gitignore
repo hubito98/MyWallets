@@ -1,5 +1,6 @@
 .vscode
-main
+./main
 served*
 nlohmann
 .DS_Store
+.idea
