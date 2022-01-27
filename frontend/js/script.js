@@ -261,14 +261,19 @@ function addWalletChart(assetStats, divName) {
 function addWalletTimeline(walletTimeline, divName) {
     var timestamps = [];
     var assetValues = [];
+    var assetAccumulatedIncomes = [];
+    var assetIncomeAccumulator = 0;
 
     walletTimeline.forEach((walletStat, i) => {
         timestamps.push(walletStat.date);
         var assetValue = 0;
-        for (let assetName in walletStat.assetsAndValues) {
-            assetValue += walletStat.assetsAndValues[assetName];
+        for (let assetName in walletStat.assetsAndValuesDeepCopy) {
+            var assetStat = walletStat.assetsAndValuesDeepCopy[assetName];
+            assetValue += assetStat.value;
+            assetIncomeAccumulator += assetStat.income;
         }
         assetValues.push(assetValue);
+        assetAccumulatedIncomes.push(assetIncomeAccumulator);
     });
 
     var canvas = $("<div style=\"width: 100%; margin-left: auto; margin-right: auto;\"><canvas id=\"wallet-timeline-chart\"></canvas></div>");
@@ -283,6 +288,14 @@ function addWalletTimeline(walletTimeline, divName) {
                 data: assetValues,
                 fill: true,
                 backgroundColor: chooseColor(8),
+                order: 2
+            },
+            {
+                label: "suma wpłat",
+                data: assetAccumulatedIncomes,
+                fill: true,
+                backgroundColor: chooseColor(9),
+                order: 1
             }]
         },
         options: {
@@ -290,9 +303,6 @@ function addWalletTimeline(walletTimeline, divName) {
                 title: {
                     display: true,
                     text: "Stan portfela w czasie"
-                },
-                legend: {
-                    display: false
                 },
                 tooltip: {
                     callbacks: {
@@ -302,15 +312,7 @@ function addWalletTimeline(walletTimeline, divName) {
                     }
                 }
             },
-            responsive: true,
-            scales: {
-                x: {
-                    stacked: true
-                },
-                y: {
-                    stacked: true
-                }
-            }
+            responsive: true
         }
     });
 }
